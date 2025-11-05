@@ -9,7 +9,6 @@ export function Footer() {
       { name: '企業情報', href: '#company' },
       { name: '事業紹介', href: '#services' },
       { name: '採用情報', href: '#careers' },
-      { name: 'お知らせ', href: '#news' },
     ],
     legal: [
       { name: 'プライバシーポリシー', href: '#' },

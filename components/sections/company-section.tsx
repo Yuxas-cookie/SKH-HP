@@ -81,8 +81,8 @@ export function CompanySection() {
           </motion.div>
         </div>
 
-        <motion.div 
-          className="mt-16 sm:mt-20 md:mt-24 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12"
+        <motion.div
+          className="mt-16 sm:mt-20 md:mt-24 flex justify-center"
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.8, delay: 0.8 }}
@@ -90,18 +90,8 @@ export function CompanySection() {
           <div className="text-center">
             <h4 className="text-lg sm:text-xl font-bold text-black mb-3 sm:mb-4">所在地</h4>
             <p className="text-gray-600 text-sm sm:text-base">
-              〒100-0004
-              <br />
-              東京都千代田区大手町1-1-1
+              大阪府吹田市千里山東2-4-3-201
             </p>
-          </div>
-          <div className="text-center">
-            <h4 className="text-lg sm:text-xl font-bold text-black mb-3 sm:mb-4">設立</h4>
-            <p className="text-gray-600 text-sm sm:text-base">2020年4月1日</p>
-          </div>
-          <div className="text-center">
-            <h4 className="text-lg sm:text-xl font-bold text-black mb-3 sm:mb-4">資本金</h4>
-            <p className="text-gray-600 text-sm sm:text-base">1億円</p>
           </div>
         </motion.div>
       </motion.div>

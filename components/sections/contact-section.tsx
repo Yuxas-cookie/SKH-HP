@@ -53,15 +53,15 @@ export function ContactSection() {
             <div className="space-y-6 sm:space-y-8">
               <div className="flex items-center space-x-4 sm:space-x-6 group">
                 <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-black transition-transform group-hover:scale-110" />
-                <span className="text-gray-600 text-base sm:text-lg">contact@skh.jp</span>
+                <span className="text-gray-600 text-base sm:text-lg">sekaino.hiroshi34@gmail.com</span>
               </div>
               <div className="flex items-center space-x-4 sm:space-x-6 group">
                 <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-black transition-transform group-hover:scale-110" />
-                <span className="text-gray-600 text-base sm:text-lg">03-1234-5678</span>
+                <span className="text-gray-600 text-base sm:text-lg">090-3618-4320</span>
               </div>
               <div className="flex items-center space-x-4 sm:space-x-6 group">
                 <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-black transition-transform group-hover:scale-110" />
-                <span className="text-gray-600 text-base sm:text-lg">〒100-0004 東京都千代田区大手町1-1-1</span>
+                <span className="text-gray-600 text-base sm:text-lg">大阪府吹田市千里山東2-4-3-201</span>
               </div>
             </div>
           </motion.div>

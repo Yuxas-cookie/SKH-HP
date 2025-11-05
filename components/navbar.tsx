@@ -21,7 +21,6 @@ export function Navbar() {
   const menuItems = [
     { href: '#services', label: '事業紹介' },
     { href: '#company', label: '企業情報' },
-    { href: '#news', label: 'お知らせ' },
     { href: '#contact', label: 'お問い合わせ' },
   ]
 

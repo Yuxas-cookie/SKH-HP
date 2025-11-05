@@ -5,6 +5,7 @@ import { useInView } from 'react-intersection-observer'
 import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 
 export function HeroSection() {
   const fadeIn = {
@@ -119,8 +120,8 @@ export function HeroSection() {
           ビジネスの可能性を広げます
         </motion.p>
         
-        <motion.div 
-          className="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-8 justify-center items-center"
+        <motion.div
+          className="flex justify-center items-center"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
@@ -130,30 +131,16 @@ export function HeroSection() {
             whileTap={{ scale: 0.98 }}
             className="w-full sm:w-auto"
           >
-            <Button
-              className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white rounded-none px-6 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7 text-base sm:text-lg lg:text-xl hover:opacity-90 transition-opacity"
-            >
-              <span className="flex items-center justify-center">
-                お問い合わせ
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 transition-transform group-hover:translate-x-2" />
-              </span>
-            </Button>
-          </motion.div>
-
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full sm:w-auto"
-          >
-            <Button
-              variant="outline"
-              className="w-full sm:w-auto border-2 border-black text-black hover:bg-black hover:text-white rounded-none px-6 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7 text-base sm:text-lg lg:text-xl transition-all duration-300"
-            >
-              <span className="flex items-center justify-center">
-                会社概要
-                <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 transition-transform group-hover:translate-x-2" />
-              </span>
-            </Button>
+            <Link href="#contact">
+              <Button
+                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white rounded-none px-6 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7 text-base sm:text-lg lg:text-xl hover:opacity-90 transition-opacity"
+              >
+                <span className="flex items-center justify-center">
+                  お問い合わせ
+                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 transition-transform group-hover:translate-x-2" />
+                </span>
+              </Button>
+            </Link>
           </motion.div>
         </motion.div>
       </motion.div>
