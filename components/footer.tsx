@@ -12,7 +12,7 @@ export function Footer() {
     ],
     legal: [
       { name: 'プライバシーポリシー', href: '#' },
-      { name: '特定商取引法に基づく表記', href: '#' },
+      { name: '特定商取引法に基づく表記', href: '/tokushoho' },
       { name: '利用規約', href: '#' },
       { name: 'お問い合わせ', href: '#contact' },
     ],
