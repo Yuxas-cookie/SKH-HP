@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 interface MagneticButtonProps {
   children: React.ReactNode
@@ -26,8 +27,6 @@ export function MagneticButton({ children, className = '', onClick, href }: Magn
     setPosition({ x: 0, y: 0 })
   }
 
-  const Component = href ? motion.a : motion.button
-
   return (
     <motion.div
       ref={ref}
@@ -37,15 +36,26 @@ export function MagneticButton({ children, className = '', onClick, href }: Magn
       transition={{ type: 'spring', stiffness: 150, damping: 15, mass: 0.1 }}
       className="inline-block"
     >
-      <Component
-        href={href}
-        onClick={onClick}
-        className={className}
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        {children}
-      </Component>
+      {href ? (
+        <Link href={href} className={className}>
+          <motion.span
+            className="inline-flex items-center justify-center w-full h-full"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            {children}
+          </motion.span>
+        </Link>
+      ) : (
+        <motion.button
+          onClick={onClick}
+          className={className}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          {children}
+        </motion.button>
+      )}
     </motion.div>
   )
 }

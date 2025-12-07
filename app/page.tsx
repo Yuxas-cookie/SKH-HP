@@ -86,16 +86,19 @@ export default function Home() {
           </Link>
           <div className="hidden md:flex items-center gap-10">
             {['Purpose', 'Mission', 'Service', 'Company'].map((item, i) => (
-              <motion.a
+              <motion.div
                 key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-sm text-neutral-400 hover:text-amber-400 transition-colors link-underline"
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 + i * 0.1 }}
               >
-                {item}
-              </motion.a>
+                <Link
+                  href={`/${item.toLowerCase()}`}
+                  className="text-sm text-neutral-400 hover:text-amber-400 transition-colors link-underline"
+                >
+                  {item}
+                </Link>
+              </motion.div>
             ))}
             <MagneticButton
               href="/contact"
@@ -192,13 +195,15 @@ export default function Home() {
             </div>
 
             {/* Right content - 3D Spline */}
-            <div className="flex-1 relative hidden lg:block">
-              <SplineScene
-                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                className="w-full h-full"
-              />
+            <div className="flex-1 relative hidden md:block min-h-[600px]">
+              <div className="absolute inset-0">
+                <SplineScene
+                  scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+                  className="w-full h-full"
+                />
+              </div>
               {/* Overlay gradient for smooth blend */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black via-transparent to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none" />
             </div>
           </motion.div>
 
