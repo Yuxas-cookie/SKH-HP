@@ -73,7 +73,7 @@ export function TransitionOverlay() {
 
         {/* Dark overlay panels */}
         <motion.div
-          className="absolute inset-0 bg-neutral-950"
+          className="absolute inset-0 bg-black"
           initial={{ scaleY: 0 }}
           animate={{ scaleY: [0, 1, 1, 0] }}
           transition={{

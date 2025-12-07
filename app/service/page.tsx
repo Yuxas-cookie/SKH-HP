@@ -207,7 +207,7 @@ export default function ServicePage() {
       </section>
 
       {/* Process Section */}
-      <section className="py-32 px-8 bg-neutral-950 text-white">
+      <section className="py-32 px-8 bg-black text-white">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}

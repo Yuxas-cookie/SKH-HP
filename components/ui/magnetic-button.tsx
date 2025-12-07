@@ -7,7 +7,7 @@ import Link from 'next/link'
 interface MagneticButtonProps {
   children: React.ReactNode
   className?: string
-  onClick?: () => void
+  onClick?: (e?: React.MouseEvent) => void
   href?: string
 }
 
@@ -37,7 +37,7 @@ export function MagneticButton({ children, className = '', onClick, href }: Magn
       className="inline-block"
     >
       {href ? (
-        <Link href={href} className={className}>
+        <Link href={href} onClick={onClick} className={className}>
           <motion.span
             className="inline-flex items-center justify-center w-full h-full"
             whileHover={{ scale: 1.05 }}

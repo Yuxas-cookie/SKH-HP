@@ -2,14 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ===== Smooth Scroll with Header Offset ===== */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
 /* ===== Premium Color Variables ===== */
 :root {
-  /* Elegant Dark Theme */
-  --color-black: #050505;
-  --color-dark: #0a0a0a;
-  --color-darker: #080808;
-  --color-gray-900: #141414;
-  --color-gray-800: #1a1a1a;
+  /* Elegant Dark Theme - True Black for Bold Look */
+  --color-black: #000000;
+  --color-dark: #030303;
+  --color-darker: #000000;
+  --color-gray-900: #0a0a0a;
+  --color-gray-800: #111111;
   --color-gray-700: #2a2a2a;
   --color-gray-600: #3a3a3a;
   --color-gray-500: #6a6a6a;
@@ -28,12 +34,12 @@
 
 @layer base {
   :root {
-    --background: 0 0% 2%;
-    --foreground: 0 0% 97%;
-    --card: 0 0% 4%;
-    --card-foreground: 0 0% 97%;
-    --popover: 0 0% 4%;
-    --popover-foreground: 0 0% 97%;
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 2%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 2%;
+    --popover-foreground: 0 0% 98%;
     --primary: 43 50% 60%;
     --primary-foreground: 0 0% 2%;
     --secondary: 0 0% 10%;
@@ -525,4 +531,9 @@
   width: 1px;
   height: 80px;
   background: linear-gradient(to bottom, transparent, var(--color-accent), transparent);
+}
+
+/* ===== Radial Gradient Background ===== */
+.bg-gradient-radial {
+  background: radial-gradient(circle at center, var(--tw-gradient-stops));
 }

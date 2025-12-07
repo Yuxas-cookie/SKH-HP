@@ -47,7 +47,7 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
+    <div className="min-h-screen bg-black text-white">
       <CustomCursor />
       <NoiseTexture opacity={0.03} />
       <Navigation variant="dark" />

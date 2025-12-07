@@ -43,7 +43,7 @@ export default function CompanyPage() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
 
   return (
-    <div className="min-h-screen bg-neutral-950 text-white">
+    <div className="min-h-screen bg-black text-white">
       <CustomCursor />
       <NoiseTexture opacity={0.03} />
       <Navigation variant="dark" />
@@ -135,7 +135,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Philosophy Section */}
-      <section className="py-32 px-8 bg-gradient-to-b from-neutral-950 to-neutral-900">
+      <section className="py-32 px-8 bg-gradient-to-b from-black to-neutral-900">
         <div className="max-w-6xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}

@@ -2,13 +2,18 @@
 
 import { motion, useScroll, useTransform, useInView } from 'framer-motion'
 import Link from 'next/link'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { SplineScene } from '@/components/ui/spline-scene'
 import { Card } from '@/components/ui/card'
 import { Spotlight } from '@/components/ui/spotlight'
 import { CustomCursor } from '@/components/ui/custom-cursor'
 import { NoiseTexture } from '@/components/ui/noise-texture'
 import { MagneticButton } from '@/components/ui/magnetic-button'
+import { EvervaultCard } from '@/components/ui/evervault-card'
+import { WarpBackground } from '@/components/ui/warp-background'
+import { NavTransitionProvider, useNavTransition } from '@/components/ui/nav-transition'
+import { TypewriterText, TypewriterTitle } from '@/components/ui/typewriter-text'
+import { LoadingScreen } from '@/components/ui/loading-screen'
 
 // Stagger animation variants
 const staggerContainer = {
@@ -59,6 +64,22 @@ const scaleIn = {
 }
 
 export default function Home() {
+  const [isLoading, setIsLoading] = useState(true)
+
+  return (
+    <>
+      {isLoading && (
+        <LoadingScreen onLoadingComplete={() => setIsLoading(false)} />
+      )}
+      <NavTransitionProvider>
+        <HomeContent />
+      </NavTransitionProvider>
+    </>
+  )
+}
+
+function HomeContent() {
+  const { navigateTo } = useNavTransition()
   const heroRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -67,6 +88,13 @@ export default function Home() {
   const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0])
   const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.9])
   const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
+
+  const navItems = [
+    { id: 'purpose', label: 'Purpose' },
+    { id: 'mission', label: 'Mission' },
+    { id: 'service', label: 'Service' },
+    { id: 'company', label: 'Company' },
+  ]
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 noise-overlay">
@@ -85,23 +113,23 @@ export default function Home() {
             SKH
           </Link>
           <div className="hidden md:flex items-center gap-10">
-            {['Purpose', 'Mission', 'Service', 'Company'].map((item, i) => (
+            {navItems.map((item, i) => (
               <motion.div
-                key={item}
+                key={item.id}
                 initial={{ opacity: 0, y: -20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.7 + i * 0.1 }}
               >
-                <Link
-                  href={`/${item.toLowerCase()}`}
-                  className="text-sm text-neutral-400 hover:text-amber-400 transition-colors link-underline"
+                <button
+                  onClick={() => navigateTo(item.id, item.label)}
+                  className="text-sm text-neutral-400 hover:text-amber-400 transition-colors link-underline cursor-pointer bg-transparent border-none"
                 >
-                  {item}
-                </Link>
+                  {item.label}
+                </button>
               </motion.div>
             ))}
             <MagneticButton
-              href="/contact"
+              onClick={() => navigateTo('contact', 'Contact')}
               className="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-amber-600 text-black text-sm rounded-full font-medium shadow-lg shadow-amber-500/20"
             >
               Contact
@@ -142,7 +170,7 @@ export default function Home() {
         </div>
 
         <Card className="w-full h-screen bg-black/[0.96] border-0 rounded-none relative overflow-hidden">
-          <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={400} />
+          <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={200} />
 
           <motion.div style={{ y: heroY }} className="flex h-full">
             {/* Left content */}
@@ -179,13 +207,13 @@ export default function Home() {
 
                 <motion.div variants={staggerItem} className="flex flex-col sm:flex-row gap-4 pt-4">
                   <MagneticButton
-                    href="/contact"
+                    onClick={() => navigateTo('contact', 'Contact')}
                     className="inline-flex items-center justify-center px-10 py-5 bg-gradient-to-r from-amber-500 to-amber-600 text-black rounded-full text-sm tracking-wide font-semibold shadow-2xl shadow-amber-500/30 hover:shadow-amber-500/50 transition-shadow"
                   >
                     お問い合わせ
                   </MagneticButton>
                   <MagneticButton
-                    href="#purpose"
+                    onClick={() => navigateTo('purpose', 'Purpose')}
                     className="inline-flex items-center justify-center px-10 py-5 border border-neutral-700 text-neutral-300 rounded-full text-sm tracking-wide hover:border-amber-500/50 hover:text-amber-400 transition-all"
                   >
                     私たちについて
@@ -227,7 +255,7 @@ export default function Home() {
       </motion.section>
 
       {/* Purpose Section */}
-      <ParallaxSection className="py-40 md:py-56 px-8 bg-gradient-to-br from-amber-50 via-white to-stone-100 relative overflow-hidden">
+      <ParallaxSection id="purpose" className="py-40 md:py-56 px-8 bg-gradient-to-br from-amber-50 via-white to-stone-100 relative overflow-hidden">
         {/* Decorative elements */}
         <motion.div
           className="absolute top-20 right-20 w-72 h-72 bg-amber-200/30 rounded-full blur-3xl"
@@ -248,121 +276,121 @@ export default function Home() {
             >
               Purpose
             </motion.p>
-            <motion.h2
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.95] mb-16 tracking-tight">
+              <TypewriterTitle
+                parts={[
+                  { text: '感動と喜び', isGradient: true },
+                  { text: 'を届ける', isGradient: false },
+                ]}
+                delay={0.3}
+              />
+            </h2>
+            <motion.div
               variants={fadeInUp}
-              className="text-5xl md:text-7xl lg:text-8xl xl:text-9xl font-extralight leading-[0.95] mb-16 tracking-tight"
+              className="text-stone-600 text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto font-light space-y-6"
             >
-              AIの恩恵を
-              <br />
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700">
-                すべての人へ
-              </span>
-              <br />
-              届ける
-            </motion.h2>
-            <motion.p
-              variants={fadeInUp}
-              className="text-stone-500 text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto font-light"
-            >
-              私たちは、AIテクノロジーの力を活用し、
-              <br className="hidden md:block" />
-              すべての人々がその恩恵を受けられる社会の実現を目指しています。
-            </motion.p>
+              <p>
+                新しい体験に出会ったとき。
+                <br />
+                未知の景色が開けたとき。
+                <br />
+                描いた理想が現実に触れたとき。
+              </p>
+              <p className="text-stone-800 text-2xl md:text-3xl font-normal">
+                その瞬間に、人は心から感動する。
+              </p>
+              <p>
+                その喜びを、
+                <br />
+                共に味わい、共に分かち合う。
+              </p>
+            </motion.div>
           </AnimatedSection>
         </div>
       </ParallaxSection>
 
       {/* Mission Section */}
-      <ParallaxSection id="mission" className="py-32 md:py-40 px-8 bg-stone-950 text-white relative overflow-hidden">
-        {/* Grid background */}
-        <div className="absolute inset-0 bg-grid-premium opacity-30" />
+      <ParallaxSection id="mission" className="py-32 md:py-40 px-8 bg-black text-white relative overflow-hidden">
+        {/* Evervault card background effect */}
+        <EvervaultCard className="pointer-events-auto" />
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <AnimatedSection className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center mb-24">
-            <motion.div variants={fadeInUp}>
-              <p className="text-amber-400 text-sm tracking-[0.3em] uppercase mb-6 font-medium">Mission</p>
-              <h2 className="text-4xl md:text-6xl lg:text-7xl font-extralight leading-[0.95] tracking-tight">
-                企業と個人が持つ
-                <br />
-                <span className="text-amber-400">可能性を解き放つ</span>
-              </h2>
-            </motion.div>
-            <motion.p variants={fadeInUp} className="text-neutral-400 text-xl leading-relaxed font-light">
-              AI・DX・AXの導入支援を通じて、企業と個人が持つ潜在的な可能性を最大限に引き出します。
-              テクノロジーの力で、ビジネスと人生を次のステージへ。
+        <div className="max-w-6xl mx-auto relative z-10">
+          <AnimatedSection className="text-center mb-20">
+            <motion.p variants={fadeInUp} className="text-amber-400 text-sm tracking-[0.3em] uppercase mb-6 font-medium">
+              Mission
             </motion.p>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight mb-12">
+              <TypewriterTitle
+                parts={[
+                  { text: '前進する未来', isGradient: true },
+                  { text: 'の実現へ', isGradient: false },
+                ]}
+                gradientClassName="text-amber-400"
+                delay={0.3}
+              />
+            </h2>
+            <motion.div variants={fadeInUp} className="text-neutral-400 text-xl md:text-2xl leading-relaxed max-w-4xl mx-auto font-light space-y-6">
+              <p>
+                世界は日々変化し、時代の流れとともに、
+                <br className="hidden md:block" />
+                進むべき方向も、戦い方も変わり続けていく。
+              </p>
+              <p>
+                その変化の中にも、
+                <br className="hidden md:block" />
+                人にも企業にも、それぞれが思い描く理想の未来がある。
+              </p>
+              <p className="text-white text-2xl md:text-3xl font-normal pt-4">
+                私たちは、関わるすべての人を圧倒的に前へ進め、
+                <br className="hidden md:block" />
+                共に成長し、共に勝つ世界を創る。
+              </p>
+            </motion.div>
           </AnimatedSection>
-
-          <motion.div
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-100px' }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-px bg-neutral-800/50 rounded-2xl overflow-hidden"
-          >
-            {[
-              { icon: '↗', title: 'Accelerate', desc: 'ビジネス変革を加速させ、競争優位性を確立します。' },
-              { icon: '◈', title: 'Innovate', desc: '革新的なソリューションで新たな価値を創造します。' },
-              { icon: '∞', title: 'Collaborate', desc: '共に成長するパートナーとして伴走します。' },
-            ].map((item, i) => (
-              <motion.div
-                key={i}
-                variants={staggerItem}
-                className="bg-stone-900/80 p-10 md:p-12 hover:bg-stone-800/80 transition-all duration-500 group"
-              >
-                <div className="text-5xl text-amber-400/40 group-hover:text-amber-400 transition-colors duration-500 mb-8">
-                  {item.icon}
-                </div>
-                <h3 className="text-2xl md:text-3xl font-light mb-4 text-white group-hover:text-amber-300 transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-neutral-500 group-hover:text-neutral-400 transition-colors leading-relaxed">
-                  {item.desc}
-                </p>
-              </motion.div>
-            ))}
-          </motion.div>
         </div>
       </ParallaxSection>
 
       {/* Vision Section */}
-      <ParallaxSection className="min-h-screen flex items-center justify-center px-8 bg-white relative overflow-hidden">
-        {/* Concentric circles */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          {[800, 600, 400, 200].map((size, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full border border-amber-200/30"
-              style={{ width: size, height: size }}
-              initial={{ scale: 0.8, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1.5, delay: i * 0.15 }}
-            />
-          ))}
-        </div>
-
-        <div className="max-w-5xl mx-auto text-center relative z-10">
+      <WarpBackground
+        className="py-32 md:py-40 bg-white border-0 rounded-none p-8"
+        beamsPerSide={4}
+        beamSize={5}
+        beamDelayMax={3}
+        beamDelayMin={0}
+        beamDuration={3}
+        perspective={100}
+        gridColor="rgba(217, 119, 6, 0.15)"
+      >
+        <div className="max-w-5xl mx-auto text-center">
           <AnimatedSection>
-            <motion.div variants={scaleIn}>
-              <p className="text-amber-600 text-sm tracking-[0.4em] uppercase mb-10 font-medium">Vision</p>
-              <h2 className="text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-extralight leading-relaxed text-stone-800">
-                日本中にAI人材を増やし
-                <br />
-                <motion.span
-                  className="inline-block my-6 px-8 py-3 bg-gradient-to-r from-amber-400 to-amber-600 text-white rounded-full text-2xl md:text-4xl font-light shadow-xl shadow-amber-500/20"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: 'spring', stiffness: 300 }}
+            <div className="bg-white/40 backdrop-blur-sm rounded-3xl p-10 md:p-16 shadow-lg shadow-amber-100/50">
+              <motion.p variants={fadeInUp} className="text-amber-600 text-sm tracking-[0.4em] uppercase mb-10 font-medium">
+                Vision
+              </motion.p>
+              <h2 className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-12">
+                <TypewriterText
+                  className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700"
+                  delay={0.3}
                 >
-                  感動と喜び
-                </motion.span>
-                <br />
-                が連鎖している社会を実現する
+                  CHANGE is NEAR
+                </TypewriterText>
               </h2>
-            </motion.div>
+              <motion.div variants={fadeInUp} className="text-stone-600 text-xl md:text-2xl leading-relaxed max-w-3xl mx-auto font-light space-y-6">
+                <p>
+                  私たちは、変化を身近に当たり前にするための
+                  <br className="hidden md:block" />
+                  仕組みと実行力を提供します。
+                </p>
+                <p className="text-stone-800 text-2xl md:text-3xl font-normal pt-4">
+                  AI人材の内製化、DX化、AX化の導入成功率100％。
+                  <br className="hidden md:block" />
+                  それを、業界の常識へと書き換える。
+                </p>
+              </motion.div>
+            </div>
           </AnimatedSection>
         </div>
-      </ParallaxSection>
+      </WarpBackground>
 
       {/* Value Section */}
       <ParallaxSection className="py-32 md:py-40 px-8 bg-stone-100">
@@ -371,9 +399,9 @@ export default function Home() {
             <motion.p variants={fadeInUp} className="text-amber-600 text-sm tracking-[0.3em] uppercase mb-4 font-medium">
               Value
             </motion.p>
-            <motion.h2 variants={fadeInUp} className="text-4xl md:text-6xl font-extralight tracking-tight">
-              私たちの価値観
-            </motion.h2>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight">
+              <TypewriterText delay={0.3}>私たちの価値観</TypewriterText>
+            </h2>
           </AnimatedSection>
 
           <motion.div
@@ -384,9 +412,9 @@ export default function Home() {
             className="space-y-6"
           >
             {[
-              { num: '01', title: '変化を楽しむ', sub: 'Embrace Change', desc: '毎日ターニングポイント。変化を恐れず、むしろ楽しみながら前進し続けます。' },
-              { num: '02', title: '挑戦を続ける', sub: 'Keep Challenging', desc: 'さあ、始めよう。毎日。失敗を恐れず、常に新しいことに挑戦し続けます。' },
-              { num: '03', title: '共創する', sub: 'Co-Create', desc: '共に成長し、共に勝つ。お客様と共に価値を創造し、成功を分かち合います。' },
+              { num: '01', title: 'Win-Win or No Deal', desc: '片側だけの勝ちは、勝ちではない。全員で勝てる選択だけをします。' },
+              { num: '02', title: '成果、実現にこだわる', desc: '努力や過程ではなく結果にこだわります。' },
+              { num: '03', title: '共に勝つ', desc: '社員、顧客、パートナー、関わる全ての人と勝つ。味方を増やし、全員で勝ちにいく。' },
             ].map((value, i) => (
               <motion.div
                 key={i}
@@ -398,12 +426,9 @@ export default function Home() {
                     {value.num}
                   </span>
                   <div className="flex-1">
-                    <div className="flex flex-wrap items-baseline gap-4 mb-3">
-                      <h3 className="text-3xl md:text-4xl font-light group-hover:text-amber-700 transition-colors">
-                        {value.title}
-                      </h3>
-                      <span className="text-amber-600 text-sm font-medium tracking-wide">{value.sub}</span>
-                    </div>
+                    <h3 className="text-3xl md:text-4xl font-light group-hover:text-amber-700 transition-colors mb-4">
+                      {value.title}
+                    </h3>
                     <p className="text-stone-500 text-lg md:text-xl leading-relaxed">{value.desc}</p>
                   </div>
                 </div>
@@ -414,15 +439,15 @@ export default function Home() {
       </ParallaxSection>
 
       {/* Service Section */}
-      <ParallaxSection id="service" className="py-32 md:py-40 px-8 bg-gradient-to-b from-stone-950 via-stone-900 to-black text-white">
+      <ParallaxSection id="service" className="py-32 md:py-40 px-8 bg-gradient-to-b from-black via-stone-950 to-black text-white">
         <div className="max-w-7xl mx-auto">
           <AnimatedSection className="text-center mb-20">
             <motion.p variants={fadeInUp} className="text-amber-400 text-sm tracking-[0.3em] uppercase mb-4 font-medium">
               Business
             </motion.p>
-            <motion.h2 variants={fadeInUp} className="text-4xl md:text-6xl lg:text-7xl font-extralight tracking-tight">
-              事業内容
-            </motion.h2>
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+              <TypewriterText className="text-white" delay={0.3}>事業内容</TypewriterText>
+            </h2>
           </AnimatedSection>
 
           <motion.div
@@ -433,10 +458,34 @@ export default function Home() {
             className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
           >
             {[
-              { num: '01', name: 'Turning AX', category: '人材開発・人材教育事業', tagline: 'その企業のAI化のターニングポイントになる' },
-              { num: '02', name: 'Solution AX', category: 'システム導入支援', tagline: '事業を見て、最適解を創る' },
-              { num: '03', name: 'AX Partner', category: '顧問サービス', tagline: '伴走するAI顧問' },
-              { num: '04', name: 'Turning AX Academy', category: '教育・スクール事業', tagline: '人生を前へ動かす、AIとAXの実装スクール' },
+              {
+                num: '01',
+                name: 'Turning AX',
+                category: '人材開発・人材教育事業',
+                tagline: 'その企業のAI化のターニングポイントになる',
+                desc: 'DX化人材、AX化人材の内製化支援サービス',
+              },
+              {
+                num: '02',
+                name: 'Solution AX',
+                category: 'AX化システム導入支援',
+                tagline: '事業を見て、最適解を創る',
+                desc: '変化の起点を共創するAX実装。課題の可視化から実装まで、一気通貫サービス',
+              },
+              {
+                num: '03',
+                name: 'AX Partner',
+                category: 'AI顧問サービス',
+                tagline: '伴走するAI顧問',
+                desc: 'Turning AXの後に継続的に伴走。AI活用を定着させるパートナー',
+              },
+              {
+                num: '04',
+                name: 'Turning AX Academy',
+                category: 'AIエンジニア・AX人材育成',
+                tagline: '人生を前へ動かす、AIとAXの実装スクール',
+                desc: 'あなたのターニングポイントになる学びとスキルを',
+              },
             ].map((service, i) => (
               <motion.div
                 key={i}
@@ -452,11 +501,14 @@ export default function Home() {
                   <p className="text-amber-400/70 text-xs tracking-[0.2em] uppercase mb-4 font-medium">
                     {service.category}
                   </p>
-                  <h3 className="text-3xl md:text-4xl font-light text-white mb-4 group-hover:text-amber-300 transition-colors duration-300">
+                  <h3 className="text-3xl md:text-4xl font-light text-white mb-3 group-hover:text-amber-300 transition-colors duration-300">
                     {service.name}
                   </h3>
-                  <p className="text-neutral-400 text-lg group-hover:text-neutral-300 transition-colors">
+                  <p className="text-amber-400/80 text-lg mb-3 font-medium">
                     {service.tagline}
+                  </p>
+                  <p className="text-neutral-500 group-hover:text-neutral-400 transition-colors leading-relaxed">
+                    {service.desc}
                   </p>
                 </div>
               </motion.div>
@@ -466,35 +518,273 @@ export default function Home() {
       </ParallaxSection>
 
       {/* Message Section */}
-      <ParallaxSection className="py-40 md:py-56 px-8 bg-amber-50 relative overflow-hidden">
+      <ParallaxSection className="py-32 md:py-48 px-8 bg-black text-white relative overflow-hidden">
+        {/* Subtle mesh gradient background */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.04)_0%,transparent_40%),radial-gradient(ellipse_at_bottom_right,rgba(168,85,247,0.03)_0%,transparent_40%)]" />
+
+        {/* Subtle grid lines */}
+        <div className="absolute inset-0 opacity-[0.015]" style={{
+          backgroundImage: `linear-gradient(rgba(245,158,11,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.3) 1px, transparent 1px)`,
+          backgroundSize: '80px 80px'
+        }} />
+
+        {/* Subtle animated glow orbs */}
+        <motion.div
+          className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[180px]"
+          animate={{
+            scale: [1, 1.3, 1],
+            opacity: [0.08, 0.15, 0.08],
+            x: [0, 80, 0],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[150px]"
+          animate={{
+            scale: [1.2, 1, 1.2],
+            opacity: [0.05, 0.12, 0.05],
+            x: [0, -60, 0],
+          }}
+          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
+        />
+
+        {/* Floating particles */}
+        {[...Array(12)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-0.5 h-0.5 bg-amber-400/30 rounded-full"
+            style={{
+              left: `${10 + (i * 7)}%`,
+              top: `${15 + (i * 6)}%`,
+            }}
+            animate={{
+              y: [0, -20, 0],
+              opacity: [0.1, 0.4, 0.1],
+            }}
+            transition={{
+              duration: 4 + i * 0.5,
+              repeat: Infinity,
+              delay: i * 0.3,
+              ease: 'easeInOut',
+            }}
+          />
+        ))}
+
+        {/* Subtle decorative lines */}
+        <motion.div
+          className="absolute top-32 left-10 w-px h-24 bg-gradient-to-b from-transparent via-amber-500/20 to-transparent"
+          animate={{ opacity: [0.2, 0.4, 0.2] }}
+          transition={{ duration: 5, repeat: Infinity }}
+        />
+        <motion.div
+          className="absolute top-48 right-16 w-px h-20 bg-gradient-to-b from-transparent via-amber-500/15 to-transparent"
+          animate={{ opacity: [0.15, 0.35, 0.15] }}
+          transition={{ duration: 6, repeat: Infinity, delay: 1 }}
+        />
+
         {/* Large quote mark */}
-        <div className="absolute top-10 md:top-20 left-5 md:left-20 text-[200px] md:text-[400px] font-serif text-amber-200/30 leading-none select-none">
-          "
-        </div>
+        <motion.div
+          className="absolute top-24 md:top-36 left-8 md:left-20 text-[150px] md:text-[220px] font-serif leading-none select-none"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1.5 }}
+        >
+          <span className="text-amber-500/[0.07]">"</span>
+        </motion.div>
 
-        <div className="max-w-5xl mx-auto relative z-10">
-          <AnimatedSection className="text-center">
-            <motion.p variants={fadeInUp} className="text-amber-600 text-sm tracking-[0.3em] uppercase mb-12 font-medium">
-              Message
-            </motion.p>
-
-            <motion.blockquote
-              variants={scaleIn}
-              className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-extralight leading-tight text-stone-800 mb-16"
-            >
-              毎日が、
-              <span className="text-amber-600">ターニングポイント</span>
-              だ。
-            </motion.blockquote>
-
-            <motion.div variants={fadeInUp} className="max-w-2xl mx-auto text-stone-600 leading-relaxed space-y-4 text-lg md:text-xl mb-16">
-              <p>AIの時代が本格的に幕を開けました。この変化は、脅威ではなく、チャンスです。</p>
-              <p>私たちSKHは、すべての企業、すべての人がAIの恩恵を受けられる社会を目指しています。</p>
+        <div className="max-w-4xl mx-auto relative z-10">
+          <AnimatedSection>
+            {/* Section header */}
+            <motion.div variants={fadeInUp} className="text-center mb-16">
+              <motion.div
+                className="inline-block mb-6"
+                whileHover={{ scale: 1.05 }}
+                transition={{ type: 'spring', stiffness: 300 }}
+              >
+                <span className="px-6 py-2 rounded-full border border-amber-500/30 bg-amber-500/5 backdrop-blur-sm text-amber-400 text-xs tracking-[0.4em] uppercase font-medium">
+                  Message
+                </span>
+              </motion.div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+                <TypewriterText className="text-white" delay={0.3}>代表メッセージ</TypewriterText>
+              </h2>
             </motion.div>
 
-            <motion.div variants={fadeInUp}>
-              <p className="text-stone-400 text-sm mb-3 tracking-wide">代表取締役 CEO</p>
-              <p className="text-3xl text-stone-800 tracking-wider font-light">世界野 博嗣</p>
+            {/* First text block */}
+            <div className="text-neutral-300 leading-loose space-y-10 text-lg md:text-xl mb-20 text-center">
+              <motion.p
+                className="text-2xl md:text-3xl font-light text-white/90"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                私は昔から、人に喜んでもらうことや、
+                <br />
+                驚きと感動が生まれる瞬間をつくることが
+                <br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-300">心から好きでした。</span>
+              </motion.p>
+              <motion.p
+                className="text-neutral-500 text-base md:text-lg italic"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                体育祭では応援団長、文化祭では舞台主演をするタイプです。
+              </motion.p>
+              <motion.p
+                className="text-neutral-400"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                誰かの世界が広がる瞬間、
+                <br />
+                未来の可能性に光が差す瞬間、
+                <br />
+                一歩踏み出した表情が変わる瞬間。
+                <br />
+                その場に立ち会えることに、深い喜びを感じてきました。
+              </motion.p>
+              <motion.p
+                className="text-2xl md:text-3xl font-medium pt-4"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-amber-100 to-white">
+                  だから私は、その感動と喜びを、
+                  <br />
+                  仲間へ、顧客へ、社会へと広げていきたい。
+                </span>
+              </motion.p>
+              <motion.p
+                className="text-neutral-400"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                誰かの人生や事業が前へ動き出す瞬間に寄り添い、
+                <br />
+                その喜びを共に分かち合いたいのです。
+              </motion.p>
+            </div>
+
+            {/* Animated divider */}
+            <motion.div
+              className="flex items-center justify-center gap-4 my-16"
+              initial={{ opacity: 0, scaleX: 0 }}
+              whileInView={{ opacity: 1, scaleX: 1 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 1.5, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              <motion.div
+                className="w-16 md:w-24 h-px bg-gradient-to-r from-transparent to-amber-500/50"
+                animate={{ scaleX: [0.8, 1, 0.8], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+              <motion.div
+                className="w-2 h-2 rounded-full bg-amber-500"
+                animate={{ scale: [1, 1.3, 1], boxShadow: ['0 0 10px rgba(245,158,11,0.5)', '0 0 25px rgba(245,158,11,0.8)', '0 0 10px rgba(245,158,11,0.5)'] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              />
+              <motion.div
+                className="w-16 md:w-24 h-px bg-gradient-to-l from-transparent to-amber-500/50"
+                animate={{ scaleX: [0.8, 1, 0.8], opacity: [0.5, 1, 0.5] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              />
+            </motion.div>
+
+            {/* Second text block */}
+            <div className="text-neutral-300 leading-loose space-y-10 text-lg md:text-xl mb-20 text-center">
+              <motion.p
+                className="text-white font-medium text-xl md:text-2xl"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                アイデアだけで終わらせない。
+                <br />
+                流行の言葉を並べるだけでも終わらせない。
+              </motion.p>
+              <motion.p
+                className="text-neutral-400"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                現場で共に考え、共に悩み、共に動き、
+                <br />
+                成果が出るまで伴走する。
+                <br />
+                そして、確かな一歩の前進を必ず生み出す。
+              </motion.p>
+              <motion.p
+                className="text-neutral-300"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                私たちが目指しているのは、
+                <br />
+                <span className="text-2xl md:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400">
+                  共に成長し、共に勝つ世界。
+                </span>
+                <br />
+                変化と挑戦を、当たり前に楽しむ文化。
+              </motion.p>
+              <motion.p
+                className="text-neutral-400"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                その中心に立ち、
+                <br />
+                人生と事業のターニングポイントを創り続けること。
+                <br />
+                それがSKHの存在意義です。
+              </motion.p>
+              <motion.p
+                className="text-2xl md:text-3xl font-medium pt-6 text-white"
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-100px' }}
+                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              >
+                これからも、
+                <br />
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-white to-amber-300">感動と喜びが連鎖する未来、</span>
+                <br />
+                理想を実現していける文化を、創っていきます。
+              </motion.p>
+            </div>
+
+            {/* Signature */}
+            <motion.div
+              className="text-center mt-20"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-100px' }}
+              transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+            >
+              <p className="text-neutral-600 text-sm mb-1 tracking-[0.2em]">株式会社SKH</p>
+              <p className="text-neutral-600 text-sm mb-6 tracking-[0.2em]">代表取締役</p>
+              <p className="text-4xl md:text-5xl tracking-[0.15em] font-light">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400">
+                  片山 弘
+                </span>
+              </p>
             </motion.div>
           </AnimatedSection>
         </div>
@@ -507,9 +797,9 @@ export default function Home() {
             <motion.p variants={fadeInUp} className="text-amber-600 text-sm tracking-[0.3em] uppercase mb-4 font-medium">
               Company
             </motion.p>
-            <motion.h2 variants={fadeInUp} className="text-4xl md:text-6xl font-extralight tracking-tight">
-              会社概要
-            </motion.h2>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight">
+              <TypewriterText delay={0.3}>会社概要</TypewriterText>
+            </h2>
           </AnimatedSection>
 
           <AnimatedSection>
@@ -517,9 +807,10 @@ export default function Home() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-10">
                 {[
                   { label: '会社名', value: '株式会社SKH' },
-                  { label: '設立', value: '2024年' },
-                  { label: '代表者', value: '世界野 博嗣' },
-                  { label: '所在地', value: '東京都渋谷区' },
+                  { label: '代表者', value: '片山 弘' },
+                  { label: '所在地', value: '大阪府吹田市千里山東2-4-3-201' },
+                  { label: '電話番号', value: '090-3618-4320' },
+                  { label: 'メールアドレス', value: 'sekaino.hiroshi34@gmail.com' },
                 ].map((item, i) => (
                   <div key={i} className="border-b border-amber-100 pb-6">
                     <p className="text-stone-400 text-sm mb-2 tracking-wide">{item.label}</p>
@@ -537,42 +828,96 @@ export default function Home() {
       </ParallaxSection>
 
       {/* Contact Section */}
-      <section className="py-32 md:py-40 px-8 bg-gradient-to-br from-stone-950 via-stone-900 to-stone-950 text-white relative overflow-hidden">
-        {/* Decorative elements */}
+      <section id="contact" className="py-32 md:py-40 px-8 bg-black text-white relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent" />
         <motion.div
           className="absolute bottom-0 left-20 w-80 h-80 bg-amber-500/5 rounded-full blur-[100px]"
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity }}
         />
-        <motion.div
-          className="absolute top-20 right-20 w-96 h-96 bg-amber-600/5 rounded-full blur-[120px]"
-          animate={{ scale: [1.2, 1, 1.2], opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 10, repeat: Infinity }}
-        />
 
-        <div className="max-w-4xl mx-auto text-center relative z-10">
-          <AnimatedSection>
-            <motion.p variants={fadeInUp} className="text-amber-400 text-sm tracking-[0.3em] uppercase mb-8 font-medium">
+        <div className="max-w-4xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <p className="text-amber-400 text-sm tracking-[0.3em] uppercase mb-8 font-medium">
               Contact
-            </motion.p>
-            <motion.h2 variants={fadeInUp} className="text-4xl md:text-6xl font-extralight mb-10 tracking-tight">
-              お問い合わせ
-            </motion.h2>
-            <motion.p variants={fadeInUp} className="text-neutral-400 text-xl mb-14 leading-relaxed">
+            </p>
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
+              <TypewriterText className="text-white" delay={0.3}>お問い合わせ</TypewriterText>
+            </h2>
+            <p className="text-neutral-400 text-xl leading-relaxed">
               AI・DX・AXの導入に関するご相談、人材育成のご依頼など、
               <br className="hidden md:block" />
               お気軽にお問い合わせください。
-            </motion.p>
-            <motion.div variants={fadeInUp}>
-              <MagneticButton
-                href="/contact"
-                className="inline-block px-14 py-6 bg-gradient-to-r from-amber-500 to-amber-600 text-black rounded-full text-lg tracking-wide font-semibold shadow-2xl shadow-amber-500/30 hover:shadow-amber-500/50 transition-shadow"
+            </p>
+          </motion.div>
+
+          <motion.form
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="space-y-8"
+            action="https://formspree.io/f/sekaino.hiroshi34@gmail.com"
+            method="POST"
+          >
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <label className="block text-sm text-neutral-500 mb-2">お名前 *</label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  className="w-full bg-transparent border-b border-neutral-800 py-3 text-white focus:border-amber-500 focus:outline-none transition-colors"
+                  placeholder="山田 太郎"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-neutral-500 mb-2">メールアドレス *</label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  className="w-full bg-transparent border-b border-neutral-800 py-3 text-white focus:border-amber-500 focus:outline-none transition-colors"
+                  placeholder="example@email.com"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm text-neutral-500 mb-2">会社名</label>
+              <input
+                type="text"
+                name="company"
+                className="w-full bg-transparent border-b border-neutral-800 py-3 text-white focus:border-amber-500 focus:outline-none transition-colors"
+                placeholder="株式会社〇〇"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm text-neutral-500 mb-2">お問い合わせ内容 *</label>
+              <textarea
+                name="message"
+                required
+                rows={5}
+                className="w-full bg-transparent border-b border-neutral-800 py-3 text-white focus:border-amber-500 focus:outline-none transition-colors resize-none"
+                placeholder="お問い合わせ内容をご記入ください"
+              />
+            </div>
+
+            <div className="text-center pt-4">
+              <button
+                type="submit"
+                className="inline-flex items-center justify-center px-14 py-6 bg-gradient-to-r from-amber-500 to-amber-600 text-black rounded-full text-lg tracking-wide font-semibold shadow-2xl shadow-amber-500/30 hover:shadow-amber-500/50 transition-shadow"
               >
-                お問い合わせフォームへ
-              </MagneticButton>
-            </motion.div>
-          </AnimatedSection>
+                送信する
+              </button>
+            </div>
+          </motion.form>
         </div>
       </section>
 
@@ -585,19 +930,12 @@ export default function Home() {
               <p className="text-neutral-500 text-sm">© 2024 SKH Inc. All rights reserved.</p>
             </div>
             <div className="flex gap-10">
-              {[
-                { href: '/privacy', label: 'Privacy' },
-                { href: '/terms', label: 'Terms' },
-                { href: '/tokushoho', label: '特定商取引法' },
-              ].map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-neutral-500 hover:text-amber-400 text-sm transition-colors link-underline"
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <Link
+                href="/tokushoho"
+                className="text-neutral-500 hover:text-amber-400 text-sm transition-colors link-underline"
+              >
+                特定商取引法
+              </Link>
             </div>
           </div>
         </div>
@@ -649,3 +987,4 @@ function ParallaxSection({
     </section>
   )
 }
+

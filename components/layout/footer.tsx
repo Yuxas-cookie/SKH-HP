@@ -20,7 +20,7 @@ export function Footer() {
   ]
 
   return (
-    <footer className="bg-neutral-950 text-neutral-400 border-t border-neutral-900">
+    <footer className="bg-black text-neutral-400 border-t border-neutral-800">
       <div className="max-w-7xl mx-auto px-8 py-20">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Logo and description */}

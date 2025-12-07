@@ -18,7 +18,7 @@ export default function Template({ children }: TemplateProps) {
         transition={{ duration: 0.5, delay: 0.5 }}
       >
         <motion.div
-          className="absolute inset-0 bg-neutral-950 origin-top"
+          className="absolute inset-0 bg-black origin-top"
           initial={{ scaleY: 1 }}
           animate={{ scaleY: 0 }}
           transition={{ duration: 0.8, ease: [0.25, 0.4, 0.25, 1], delay: 0.2 }}
