@@ -1,86 +1,164 @@
 "use client"
 
 import Link from 'next/link'
-import { Facebook, Twitter, Linkedin, Instagram } from 'lucide-react'
+import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
+import { usePageTransition } from './page-transition'
 
 export function Footer() {
+  const [ref, inView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  })
+
+  const { navigateTo, isTransitioning } = usePageTransition()
+
   const navigation = {
-    company: [
-      { name: '企業情報', href: '#company' },
-      { name: '事業紹介', href: '#services' },
-      { name: '採用情報', href: '#careers' },
+    main: [
+      { name: 'Purpose', href: '#purpose' },
+      { name: 'Business', href: '#business' },
+      { name: 'Message', href: '#message' },
+      { name: 'Company', href: '#company' },
+      { name: 'Contact', href: '#contact' },
     ],
     legal: [
-      { name: 'プライバシーポリシー', href: '#' },
-      { name: '特定商取引法に基づく表記', href: '/tokushoho' },
-      { name: '利用規約', href: '#' },
-      { name: 'お問い合わせ', href: '#contact' },
-    ],
-    social: [
-      { name: 'Facebook', icon: Facebook, href: '#' },
-      { name: 'Twitter', icon: Twitter, href: '#' },
-      { name: 'LinkedIn', icon: Linkedin, href: '#' },
-      { name: 'Instagram', icon: Instagram, href: '#' },
+      { name: 'Privacy Policy', href: '#' },
+      { name: 'Tokushoho', href: '/tokushoho' },
     ],
   }
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.1 }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 1, ease: [0.16, 1, 0.3, 1] }
+    }
+  }
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith('#')) {
+      e.preventDefault()
+      if (isTransitioning) return
+      navigateTo(href)
+    }
+  }
+
   return (
-    <footer className="bg-gray-50 relative overflow-hidden">
-      <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-12 sm:px-6 lg:px-8 relative">
-        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-4">
-          <div>
-            <Link href="/" className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-500 via-fuchsia-500 to-blue-500 bg-clip-text text-transparent bg-[length:200%_auto] hover:bg-[center_right_1rem] transition-[background-position] duration-300">
-              株式会社SKH
+    <footer ref={ref} className="bg-[var(--color-black)] relative">
+      {/* Top Border */}
+      <div className="h-px bg-[var(--color-gray-800)]" />
+
+      <motion.div
+        className="max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12 py-20 md:py-32"
+        variants={containerVariants}
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-8">
+          {/* Brand */}
+          <motion.div variants={itemVariants} className="lg:col-span-5">
+            <Link href="/" className="inline-block mb-10">
+              <span className="text-[var(--color-white)] text-3xl font-extralight tracking-[0.2em]">
+                SKH
+              </span>
             </Link>
-            <p className="mt-4 text-xs sm:text-sm text-gray-600">
-              最先端のテクノロジーで、
-              <br />
-              より良い未来を創造する
+            <p className="text-[var(--color-gray-500)] text-base leading-[1.9] max-w-md mb-10 font-light">
+              感動と喜びを届ける。<br />
+              AI・DX・AXの力で企業と人の可能性を解き放ち、<br />
+              共に成長し、共に勝つ未来を創る。
             </p>
-          </div>
-          <div>
-            <h3 className="text-xs sm:text-sm font-semibold text-gray-900">企業情報</h3>
-            <ul role="list" className="mt-3 sm:mt-4 space-y-2 sm:space-y-4">
-              {navigation.company.map((item) => (
+
+            {/* Contact Info */}
+            <div className="space-y-4 text-[var(--color-gray-600)] text-sm">
+              <p>sekaino.hiroshi34@gmail.com</p>
+              <p>090-3618-4320</p>
+              <p>〒565-0842 大阪府吹田市千里山東2-4-3-201</p>
+            </div>
+          </motion.div>
+
+          {/* Navigation */}
+          <motion.div variants={itemVariants} className="lg:col-span-3 lg:col-start-8">
+            <h4 className="text-[var(--color-gray-500)] text-xs tracking-[0.25em] uppercase mb-8">
+              Navigation
+            </h4>
+            <ul className="space-y-5">
+              {navigation.main.map((item) => (
                 <li key={item.name}>
-                  <Link href={item.href} className="text-xs sm:text-sm text-gray-600 hover:text-black transition-colors">
+                  <a
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className="text-[var(--color-gray-400)] text-sm hover:text-[var(--color-white)] transition-colors duration-500 cursor-pointer"
+                  >
                     {item.name}
-                  </Link>
+                  </a>
                 </li>
               ))}
             </ul>
-          </div>
-          <div>
-            <h3 className="text-xs sm:text-sm font-semibold text-gray-900">法的情報</h3>
-            <ul role="list" className="mt-3 sm:mt-4 space-y-2 sm:space-y-4">
+          </motion.div>
+
+          {/* Legal & CTA */}
+          <motion.div variants={itemVariants} className="lg:col-span-2">
+            <h4 className="text-[var(--color-gray-500)] text-xs tracking-[0.25em] uppercase mb-8">
+              Legal
+            </h4>
+            <ul className="space-y-5 mb-12">
               {navigation.legal.map((item) => (
                 <li key={item.name}>
-                  <Link href={item.href} className="text-xs sm:text-sm text-gray-600 hover:text-black transition-colors">
+                  <Link
+                    href={item.href}
+                    className="text-[var(--color-gray-400)] text-sm hover:text-[var(--color-white)] transition-colors duration-500"
+                  >
                     {item.name}
                   </Link>
                 </li>
               ))}
             </ul>
-          </div>
-          <div>
-            <h3 className="text-xs sm:text-sm font-semibold text-gray-900">ソーシャルメディア</h3>
-            <ul role="list" className="mt-3 sm:mt-4 flex space-x-4 sm:space-x-6">
-              {navigation.social.map((item) => (
-                <li key={item.name}>
-                  <Link href={item.href} className="text-gray-500 hover:text-black transition-colors">
-                    <span className="sr-only">{item.name}</span>
-                    <item.icon className="h-5 w-5 sm:h-6 sm:w-6" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
+
+            <a
+              href="#contact"
+              onClick={(e) => handleNavClick(e, '#contact')}
+              className="btn-premium text-[10px] py-3 px-6 inline-block cursor-pointer"
+            >
+              <span>Contact</span>
+            </a>
+          </motion.div>
         </div>
-        <div className="mt-8 border-t border-gray-900/10 pt-8">
-          <p className="text-xs text-gray-500">&copy; 2024 株式会社SKH All rights reserved.</p>
-        </div>
-      </div>
+
+        {/* Bottom */}
+        <motion.div
+          variants={itemVariants}
+          className="mt-20 pt-10 border-t border-[var(--color-gray-900)]"
+        >
+          <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-[var(--color-gray-700)] text-xs tracking-[0.15em]">
+              &copy; 2024 SKH Inc. All rights reserved.
+            </p>
+            <div className="flex items-center gap-10">
+              <Link
+                href="#"
+                className="text-[var(--color-gray-700)] text-xs tracking-wider hover:text-[var(--color-gray-500)] transition-colors"
+              >
+                Privacy
+              </Link>
+              <Link
+                href="/tokushoho"
+                className="text-[var(--color-gray-700)] text-xs tracking-wider hover:text-[var(--color-gray-500)] transition-colors"
+              >
+                Tokushoho
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </motion.div>
     </footer>
   )
 }

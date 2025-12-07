@@ -1,148 +1,200 @@
 "use client"
 
 import { motion } from 'framer-motion'
-import { useInView } from 'react-intersection-observer'
-import { Button } from '@/components/ui/button'
-import { ArrowRight } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
+import { usePageTransition } from '../page-transition'
 
 export function HeroSection() {
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  }
-
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1
-  })
-
-  const [dots, setDots] = useState<{ x: number; y: number; delay: number; id: number }[]>([])
-  const [isClient, setIsClient] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const { navigateTo, isTransitioning } = usePageTransition()
 
   useEffect(() => {
-    setIsClient(true)
-    
-    const newDots = Array.from({ length: 80 }, (_, index) => ({
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      delay: Math.random() * 2,
-      id: index
-    }))
-    setDots(newDots)
+    setMounted(true)
   }, [])
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.12,
+        delayChildren: 0.5
+      }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 100 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.4,
+        ease: [0.16, 1, 0.3, 1]
+      }
+    }
+  }
+
+  const letterVariants = {
+    hidden: { opacity: 0, y: 120 },
+    visible: (i: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 1.2,
+        ease: [0.16, 1, 0.3, 1],
+        delay: 0.6 + i * 0.05
+      }
+    })
+  }
+
+  const lineVariants = {
+    hidden: { scaleX: 0 },
+    visible: {
+      scaleX: 1,
+      transition: {
+        duration: 2,
+        ease: [0.16, 1, 0.3, 1],
+        delay: 1.5
+      }
+    }
+  }
+
+  const mainText = "未来を創造する"
+  const subText = "テクノロジーの力"
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault()
+    if (isTransitioning) return
+    navigateTo(href)
+  }
+
   return (
-    <section 
-      ref={ref}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden bg-white"
-    >
-      {/* Animated Background */}
-      <div className="absolute inset-0 animated-gradient" />
-      
-      {/* Tech Circles */}
-      <div className="tech-circles">
-        <div className="tech-circle" />
-        <div className="tech-circle" />
-        <div className="tech-circle" />
-      </div>
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[var(--color-black)]">
+      {/* Background Grid */}
+      <div className="absolute inset-0 bg-grid-premium opacity-40" />
 
-      {/* Tech Lines */}
-      <div className="tech-lines">
-        <div className="tech-line" />
-        <div className="tech-line" />
-        <div className="tech-line" />
-        <div className="tech-line" />
-      </div>
+      {/* Gradient Orbs */}
+      <div className="absolute top-1/4 -left-40 w-[600px] h-[600px] rounded-full bg-[var(--color-accent)] opacity-[0.03] blur-[150px]" />
+      <div className="absolute bottom-1/4 -right-40 w-[500px] h-[500px] rounded-full bg-[var(--color-accent)] opacity-[0.02] blur-[120px]" />
 
-      {/* Digital Dots - Only render on client side */}
-      {isClient && (
-        <div className="digital-dots">
-          {dots.map((dot) => (
-            <div
-              key={dot.id}
-              className="digital-dot"
-              style={{
-                left: `${dot.x}%`,
-                top: `${dot.y}%`,
-                animationDelay: `${dot.delay}s`
-              }}
-            />
-          ))}
-        </div>
-      )}
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[var(--color-black)]" />
 
-      <div className="absolute inset-0 bg-grid-pattern opacity-20" />
-      
-      {/* Content */}
+      {/* Main Content */}
       <motion.div
+        className="relative z-10 w-full max-w-[90rem] mx-auto px-6 sm:px-8 lg:px-12"
+        variants={containerVariants}
         initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={fadeIn}
-        transition={{ duration: 0.8 }}
-        className="text-center z-10 px-4 w-full max-w-6xl mx-auto"
+        animate={mounted ? "visible" : "hidden"}
       >
-        <motion.h1 
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold mb-6 sm:mb-8 text-glow"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          <motion.span 
-            className="text-black inline-block hover-lift"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            未来
-          </motion.span>
-          を創造する
-          <br className="md:hidden" />
-          <span className="hidden md:inline"> </span>
-          <motion.span 
-            className="bg-gradient-to-r from-blue-600 to-fuchsia-600 bg-clip-text text-transparent inline-block hover-lift"
-            whileHover={{ scale: 1.05 }}
-            transition={{ type: "spring", stiffness: 400 }}
-          >
-            テクノロジー
-          </motion.span>
-          の力
-        </motion.h1>
-        
-        <motion.p 
-          className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-gray-600 mb-8 sm:mb-12 lg:mb-16 max-w-3xl mx-auto leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          私たちは、革新的なテクノロジーソリューションで
-          <br className="hidden sm:block" />
-          ビジネスの可能性を広げます
-        </motion.p>
-        
-        <motion.div
-          className="flex justify-center items-center"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full sm:w-auto"
-          >
-            <Link href="#contact">
-              <Button
-                className="w-full sm:w-auto bg-gradient-to-r from-blue-600 to-fuchsia-600 text-white rounded-none px-6 sm:px-8 lg:px-10 py-5 sm:py-6 lg:py-7 text-base sm:text-lg lg:text-xl hover:opacity-90 transition-opacity"
-              >
-                <span className="flex items-center justify-center">
-                  お問い合わせ
-                  <ArrowRight className="ml-2 h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 transition-transform group-hover:translate-x-2" />
-                </span>
-              </Button>
-            </Link>
-          </motion.div>
+        {/* Top Label */}
+        <motion.div variants={itemVariants} className="mb-16 md:mb-24">
+          <span className="section-label">
+            Technology Company
+          </span>
         </motion.div>
+
+        {/* Main Heading - Line 1 */}
+        <div className="overflow-hidden mb-4">
+          <div className="flex flex-wrap">
+            {mainText.split('').map((char, index) => (
+              <motion.span
+                key={`main-${index}`}
+                custom={index}
+                variants={letterVariants}
+                initial="hidden"
+                animate={mounted ? "visible" : "hidden"}
+                className="text-hero text-[var(--color-white)]"
+              >
+                {char}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Heading - Line 2 */}
+        <div className="overflow-hidden mb-16 md:mb-24">
+          <div className="flex flex-wrap">
+            {subText.split('').map((char, index) => (
+              <motion.span
+                key={`sub-${index}`}
+                custom={index + mainText.length}
+                variants={letterVariants}
+                initial="hidden"
+                animate={mounted ? "visible" : "hidden"}
+                className={`text-hero ${index < 7 ? 'text-gradient' : 'text-[var(--color-white)]'}`}
+              >
+                {char}
+              </motion.span>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-end">
+          {/* Description */}
+          <motion.div variants={itemVariants} className="lg:col-span-5">
+            <p className="text-[var(--color-gray-400)] text-xl md:text-2xl leading-relaxed font-light">
+              私たちは、AI・DX・AXの力で企業と人の可能性を解き放ち、
+              感動と喜びが連鎖する未来を共に創ります。
+            </p>
+          </motion.div>
+
+          {/* Spacer */}
+          <div className="hidden lg:block lg:col-span-3" />
+
+          {/* CTA */}
+          <motion.div variants={itemVariants} className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col xl:flex-row gap-4 lg:justify-end">
+            <a
+              href="#contact"
+              onClick={(e) => handleNavClick(e, '#contact')}
+              className="btn-premium cursor-pointer"
+            >
+              <span>Contact Us</span>
+            </a>
+            <a
+              href="#purpose"
+              onClick={(e) => handleNavClick(e, '#purpose')}
+              className="btn-premium cursor-pointer"
+            >
+              <span>Our Purpose</span>
+            </a>
+          </motion.div>
+        </div>
+
+        {/* Decorative Line */}
+        <motion.div
+          variants={lineVariants}
+          className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--color-accent)] to-transparent origin-center opacity-50"
+        />
+      </motion.div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-6"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2.5, duration: 1 }}
+      >
+        <span className="text-[var(--color-gray-600)] text-[10px] tracking-[0.4em] uppercase">
+          Scroll
+        </span>
+        <motion.div
+          className="w-px h-16 bg-gradient-to-b from-[var(--color-accent)] to-transparent"
+          animate={{ scaleY: [1, 0.4, 1] }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </motion.div>
+
+      {/* Corner Accent */}
+      <motion.div
+        className="absolute top-8 right-8 text-[var(--color-gray-700)] text-xs tracking-[0.3em] font-light"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 2, duration: 1 }}
+      >
+        EST. 2024
       </motion.div>
     </section>
   )

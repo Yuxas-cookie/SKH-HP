@@ -2,105 +2,172 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
-import { Button } from '@/components/ui/button'
-import { Mail, Phone, MapPin } from 'lucide-react'
 
 export function ContactSection() {
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 }
-  }
-
   const [ref, inView] = useInView({
     triggerOnce: true,
     threshold: 0.1
   })
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15, delayChildren: 0.1 }
+    }
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 80 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] }
+    }
+  }
+
   return (
     <section
       id="contact"
       ref={ref}
-      className="py-20 sm:py-24 md:py-28 lg:py-32 px-4 bg-[#F8F9FA] relative overflow-hidden"
+      className="relative bg-[var(--color-dark)] overflow-hidden"
     >
-      <div className="absolute inset-0 bg-grid-pattern opacity-10" />
-      <div className="tech-circles opacity-5">
-        <div className="tech-circle" />
-      </div>
-      
-      <motion.div
-        initial="hidden"
-        animate={inView ? "visible" : "hidden"}
-        variants={fadeIn}
-        transition={{ duration: 0.8 }}
-        className="max-w-7xl mx-auto relative z-10"
-      >
-        <motion.h2 
-          className="text-3xl sm:text-4xl md:text-5xl font-bold text-center mb-12 sm:mb-16 md:mb-20 text-black"
-          initial={{ opacity: 0, y: 20 }}
-          animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] rounded-full bg-[var(--color-accent)] opacity-[0.02] blur-[150px]" />
+
+      <div className="section-padding-lg">
+        <motion.div
+          className="max-w-[90rem] mx-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate={inView ? "visible" : "hidden"}
         >
-          お問い合わせ
-        </motion.h2>
-        
-        <div className="grid md:grid-cols-2 gap-12 md:gap-16">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: -50 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-          >
-            <h3 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-black">お気軽にご連絡ください</h3>
-            <div className="space-y-6 sm:space-y-8">
-              <div className="flex items-center space-x-4 sm:space-x-6 group">
-                <Mail className="w-6 h-6 sm:w-8 sm:h-8 text-black transition-transform group-hover:scale-110" />
-                <span className="text-gray-600 text-base sm:text-lg">sekaino.hiroshi34@gmail.com</span>
-              </div>
-              <div className="flex items-center space-x-4 sm:space-x-6 group">
-                <Phone className="w-6 h-6 sm:w-8 sm:h-8 text-black transition-transform group-hover:scale-110" />
-                <span className="text-gray-600 text-base sm:text-lg">090-3618-4320</span>
-              </div>
-              <div className="flex items-center space-x-4 sm:space-x-6 group">
-                <MapPin className="w-6 h-6 sm:w-8 sm:h-8 text-black transition-transform group-hover:scale-110" />
-                <span className="text-gray-600 text-base sm:text-lg">大阪府吹田市千里山東2-4-3-201</span>
-              </div>
-            </div>
+          {/* Section Label */}
+          <motion.div variants={itemVariants} className="mb-20 md:mb-32">
+            <span className="section-label">Contact</span>
           </motion.div>
-          
-          <motion.form
-            initial={{ opacity: 0, x: 50 }}
-            animate={inView ? { opacity: 1, x: 0 } : { opacity: 0, x: 50 }}
-            transition={{ duration: 0.8, delay: 0.6 }}
-            className="space-y-6 sm:space-y-8"
-          >
-            <div>
-              <label className="block text-sm sm:text-base font-medium mb-2 sm:mb-3 text-black">お名前</label>
-              <input
-                type="text"
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-black focus:outline-none focus:ring-2 focus:ring-black transition-all duration-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm sm:text-base font-medium mb-2 sm:mb-3 text-black">メールアドレス</label>
-              <input
-                type="email"
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-black focus:outline-none focus:ring-2 focus:ring-black transition-all duration-300"
-              />
-            </div>
-            <div>
-              <label className="block text-sm sm:text-base font-medium mb-2 sm:mb-3 text-black">お問い合わせ内容</label>
-              <textarea
-                rows={6}
-                className="w-full px-4 sm:px-6 py-3 sm:py-4 bg-white border-2 border-black focus:outline-none focus:ring-2 focus:ring-black transition-all duration-300"
-              ></textarea>
-            </div>
-            <Button
-              className="w-full animated-button text-white rounded-none px-4 sm:px-6 py-5 sm:py-7 text-base sm:text-lg"
-            >
-              <span>送信する</span>
-            </Button>
-          </motion.form>
-        </div>
-      </motion.div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+            {/* Left Column - Text */}
+            <motion.div variants={itemVariants} className="lg:col-span-5">
+              <h2 className="text-section text-[var(--color-white)] mb-10">
+                お問い合わせ
+              </h2>
+              <p className="text-[var(--color-gray-400)] text-xl leading-relaxed font-light mb-16">
+                AI・DX導入のご相談、人材育成のお問い合わせなど、どんなことでもお気軽にご連絡ください。
+              </p>
+
+              {/* Contact Info */}
+              <div className="space-y-10">
+                <div className="group">
+                  <span className="text-[var(--color-gray-600)] text-xs tracking-[0.25em] uppercase block mb-3">
+                    Email
+                  </span>
+                  <a
+                    href="mailto:sekaino.hiroshi34@gmail.com"
+                    className="text-[var(--color-white)] text-xl font-light hover:text-[var(--color-accent)] transition-colors duration-300"
+                  >
+                    sekaino.hiroshi34@gmail.com
+                  </a>
+                </div>
+                <div className="group">
+                  <span className="text-[var(--color-gray-600)] text-xs tracking-[0.25em] uppercase block mb-3">
+                    Phone
+                  </span>
+                  <a
+                    href="tel:090-3618-4320"
+                    className="text-[var(--color-white)] text-xl font-light hover:text-[var(--color-accent)] transition-colors duration-300"
+                  >
+                    090-3618-4320
+                  </a>
+                </div>
+                <div className="group">
+                  <span className="text-[var(--color-gray-600)] text-xs tracking-[0.25em] uppercase block mb-3">
+                    Address
+                  </span>
+                  <p className="text-[var(--color-white)] text-xl font-light">
+                    〒565-0842<br />
+                    大阪府吹田市千里山東2-4-3-201
+                  </p>
+                </div>
+              </div>
+
+              {/* Response Time */}
+              <div className="mt-16 pt-10 border-t border-[var(--color-gray-800)]">
+                <p className="text-[var(--color-gray-500)] text-sm">
+                  お問い合わせから<span className="text-[var(--color-accent)]">48時間以内</span>にご返信いたします。
+                </p>
+              </div>
+            </motion.div>
+
+            {/* Right Column - Form */}
+            <motion.div variants={itemVariants} className="lg:col-span-7">
+              <form className="space-y-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+                  <div>
+                    <label className="block text-[var(--color-gray-500)] text-xs tracking-[0.2em] uppercase mb-6">
+                      お名前 <span className="text-[var(--color-accent)]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      className="input-premium"
+                      placeholder="山田 太郎"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[var(--color-gray-500)] text-xs tracking-[0.2em] uppercase mb-6">
+                      会社名
+                    </label>
+                    <input
+                      type="text"
+                      className="input-premium"
+                      placeholder="株式会社〇〇"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-[var(--color-gray-500)] text-xs tracking-[0.2em] uppercase mb-6">
+                    メールアドレス <span className="text-[var(--color-accent)]">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    className="input-premium"
+                    placeholder="example@email.com"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[var(--color-gray-500)] text-xs tracking-[0.2em] uppercase mb-6">
+                    お問い合わせ内容 <span className="text-[var(--color-accent)]">*</span>
+                  </label>
+                  <textarea
+                    rows={6}
+                    required
+                    className="input-premium resize-none"
+                    placeholder="お問い合わせ内容をご記入ください"
+                  />
+                </div>
+
+                <div className="pt-6">
+                  <button type="submit" className="btn-premium-fill w-full md:w-auto">
+                    <span>送信する</span>
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        </motion.div>
+      </div>
+
+      {/* Large Background Text */}
+      <div className="absolute bottom-0 right-0 pointer-events-none select-none overflow-hidden opacity-20">
+        <span className="text-[15vw] font-extralight text-[var(--color-gray-900)] leading-none">
+          CONTACT
+        </span>
+      </div>
     </section>
   )
 }

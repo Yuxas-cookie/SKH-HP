@@ -20,6 +20,16 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        // New brand colors
+        brand: {
+          navy: '#0f172a',
+          'navy-light': '#1e293b',
+          slate: '#334155',
+          cyan: '#06b6d4',
+          'cyan-light': '#22d3ee',
+          violet: '#8b5cf6',
+          'violet-light': '#a78bfa',
+        },
         navy: {
           DEFAULT: '#1e3a8a',
           light: '#2563eb',
@@ -65,6 +75,9 @@ const config: Config = {
           '5': 'hsl(var(--chart-5))',
         },
       },
+      fontFamily: {
+        sans: ['var(--font-inter)', 'system-ui', 'sans-serif'],
+      },
       keyframes: {
         'accordion-down': {
           from: {
@@ -82,10 +95,25 @@ const config: Config = {
             height: '0',
           },
         },
+        'float': {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-20px)' },
+        },
+        'glow': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.5' },
+        },
+        'shimmer': {
+          '0%': { backgroundPosition: '-200% 0' },
+          '100%': { backgroundPosition: '200% 0' },
+        },
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
+        'float': 'float 6s ease-in-out infinite',
+        'glow': 'glow 2s ease-in-out infinite',
+        'shimmer': 'shimmer 2s linear infinite',
       },
     },
   },
