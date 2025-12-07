@@ -1,6 +1,6 @@
 'use client'
 
-import { motion, useScroll, useTransform, useInView } from 'framer-motion'
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion'
 import Link from 'next/link'
 import { useRef, useState } from 'react'
 import { SplineScene } from '@/components/ui/spline-scene'
@@ -80,6 +80,7 @@ export default function Home() {
 
 function HomeContent() {
   const { navigateTo } = useNavTransition()
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const heroRef = useRef<HTMLElement>(null)
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -95,6 +96,11 @@ function HomeContent() {
     { id: 'service', label: 'Service' },
     { id: 'company', label: 'Company' },
   ]
+
+  const handleMobileNavClick = (id: string, label: string) => {
+    setIsMobileMenuOpen(false)
+    navigateTo(id, label)
+  }
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 noise-overlay">
@@ -135,12 +141,64 @@ function HomeContent() {
               Contact
             </MagneticButton>
           </div>
-          <button className="md:hidden text-white">
+          <button
+            className="md:hidden text-white p-2"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+              {isMobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 6h16M4 12h16M4 18h16" />
+              )}
             </svg>
           </button>
         </div>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.3 }}
+              className="md:hidden bg-black/95 backdrop-blur-lg border-t border-white/10"
+            >
+              <div className="px-8 py-6 space-y-4">
+                {navItems.map((item, i) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                  >
+                    <button
+                      onClick={() => handleMobileNavClick(item.id, item.label)}
+                      className="block w-full text-left text-lg text-neutral-300 hover:text-amber-400 transition-colors py-2"
+                    >
+                      {item.label}
+                    </button>
+                  </motion.div>
+                ))}
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: navItems.length * 0.1 }}
+                  className="pt-4"
+                >
+                  <button
+                    onClick={() => handleMobileNavClick('contact', 'Contact')}
+                    className="w-full px-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 text-black text-sm rounded-full font-medium"
+                  >
+                    Contact
+                  </button>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </motion.nav>
 
       {/* Hero Section with Spline 3D */}
