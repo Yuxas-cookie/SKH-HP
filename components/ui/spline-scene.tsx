@@ -11,6 +11,23 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
 
+  // Extract scene ID from URL like "https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+  const getEmbedUrl = (sceneUrl: string) => {
+    const parts = sceneUrl.split('/')
+    // Find the scene ID (the part before 'scene.splinecode')
+    const sceneCodeIndex = parts.findIndex(p => p.includes('scene.splinecode'))
+    if (sceneCodeIndex > 0) {
+      const sceneId = parts[sceneCodeIndex - 1]
+      return `https://my.spline.design/${sceneId}/`
+    }
+    // Fallback: try to extract from prod.spline.design URL
+    const match = sceneUrl.match(/spline\.design\/([^\/]+)/)
+    if (match) {
+      return `https://my.spline.design/${match[1]}/`
+    }
+    return sceneUrl
+  }
+
   useEffect(() => {
     // Timeout for loading
     const timer = setTimeout(() => {
@@ -44,7 +61,7 @@ export function SplineScene({ scene, className }: SplineSceneProps) {
         </div>
       )}
       <iframe
-        src={`https://my.spline.design/${scene.split('/').pop()?.replace('scene.splinecode', '')}`}
+        src={getEmbedUrl(scene)}
         frameBorder="0"
         width="100%"
         height="100%"
