@@ -1,22 +1,6 @@
 'use client'
 
-import dynamic from 'next/dynamic'
-import { Suspense, useState, useEffect } from 'react'
-
-const Spline = dynamic(
-  () => import('@splinetool/react-spline').then((mod) => mod.default),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="w-full h-full flex items-center justify-center bg-black/50">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-amber-400/60 text-sm tracking-wider">Loading 3D...</span>
-        </div>
-      </div>
-    ),
-  }
-)
+import { useState, useEffect } from 'react'
 
 interface SplineSceneProps {
   scene: string
@@ -24,76 +8,51 @@ interface SplineSceneProps {
 }
 
 export function SplineScene({ scene, className }: SplineSceneProps) {
+  const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
-  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    setIsClient(true)
-  }, [])
+    // Timeout for loading
+    const timer = setTimeout(() => {
+      setIsLoading(false)
+    }, 3000)
 
-  if (!isClient) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-black/50">
-        <div className="flex flex-col items-center gap-4">
-          <div className="w-12 h-12 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
-          <span className="text-amber-400/60 text-sm tracking-wider">Loading 3D...</span>
-        </div>
-      </div>
-    )
-  }
+    return () => clearTimeout(timer)
+  }, [])
 
   if (hasError) {
     return (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-black to-stone-900">
+      <div className={`${className} flex items-center justify-center bg-gradient-to-br from-black to-stone-900`}>
         <div className="text-center">
-          <div className="w-24 h-24 mx-auto mb-6 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/10 flex items-center justify-center">
-            <span className="text-4xl text-amber-400">S</span>
+          <div className="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-br from-amber-500/20 to-amber-600/10 flex items-center justify-center border border-amber-500/20">
+            <span className="text-5xl font-extralight text-amber-400">S</span>
           </div>
-          <p className="text-amber-400/60 text-sm tracking-wider">SKH Technology</p>
+          <p className="text-amber-400/60 text-sm tracking-[0.3em] uppercase">SKH Technology</p>
         </div>
       </div>
     )
   }
 
   return (
-    <Suspense
-      fallback={
-        <div className="w-full h-full flex items-center justify-center bg-black/50">
+    <div className={`${className} relative`}>
+      {isLoading && (
+        <div className="absolute inset-0 flex items-center justify-center bg-black/80 z-10">
           <div className="flex flex-col items-center gap-4">
             <div className="w-12 h-12 border-2 border-amber-400 border-t-transparent rounded-full animate-spin"></div>
             <span className="text-amber-400/60 text-sm tracking-wider">Loading 3D...</span>
           </div>
         </div>
-      }
-    >
-      <ErrorBoundaryWrapper onError={() => setHasError(true)}>
-        <Spline
-          scene={scene}
-          className={className}
-          onError={() => setHasError(true)}
-        />
-      </ErrorBoundaryWrapper>
-    </Suspense>
+      )}
+      <iframe
+        src={`https://my.spline.design/${scene.split('/').pop()?.replace('scene.splinecode', '')}`}
+        frameBorder="0"
+        width="100%"
+        height="100%"
+        className="absolute inset-0"
+        onLoad={() => setIsLoading(false)}
+        onError={() => setHasError(true)}
+        allow="autoplay"
+      />
+    </div>
   )
-}
-
-// Simple error boundary wrapper
-function ErrorBoundaryWrapper({
-  children,
-  onError
-}: {
-  children: React.ReactNode
-  onError: () => void
-}) {
-  useEffect(() => {
-    const handleError = (event: ErrorEvent) => {
-      if (event.message.includes('Spline') || event.message.includes('constructor')) {
-        onError()
-      }
-    }
-    window.addEventListener('error', handleError)
-    return () => window.removeEventListener('error', handleError)
-  }, [onError])
-
-  return <>{children}</>
 }
