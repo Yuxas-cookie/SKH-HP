@@ -75,6 +75,7 @@ interface TypewriterTitleProps {
   parts: {
     text: string
     isGradient?: boolean
+    isLineBreak?: boolean
   }[]
   className?: string
   gradientClassName?: string
@@ -93,42 +94,50 @@ export function TypewriterTitle({
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
   // Flatten all characters with their styling info
-  const allChars: { char: string; isGradient: boolean }[] = []
+  const allChars: { char: string; isGradient: boolean; isLineBreak: boolean }[] = []
   parts.forEach((part) => {
-    part.text.split('').forEach((char) => {
-      allChars.push({ char, isGradient: part.isGradient || false })
-    })
+    if (part.isLineBreak) {
+      allChars.push({ char: '\n', isGradient: false, isLineBreak: true })
+    } else {
+      part.text.split('').forEach((char) => {
+        allChars.push({ char, isGradient: part.isGradient || false, isLineBreak: false })
+      })
+    }
   })
 
   return (
     <motion.span
       ref={ref}
-      className={`inline-block ${className}`}
+      className={`inline ${className}`}
       initial="hidden"
       animate={isInView ? 'visible' : 'hidden'}
     >
       {allChars.map((item, index) => (
-        <motion.span
-          key={index}
-          className={`inline-block ${item.isGradient ? gradientClassName : ''}`}
-          variants={{
-            hidden: {
-              opacity: 0,
-              y: 20,
-            },
-            visible: {
-              opacity: 1,
-              y: 0,
-            },
-          }}
-          transition={{
-            duration: 0.3,
-            delay: delay + index * duration,
-            ease: [0.25, 0.4, 0.25, 1],
-          }}
-        >
-          {item.char === ' ' ? '\u00A0' : item.char}
-        </motion.span>
+        item.isLineBreak ? (
+          <br key={index} />
+        ) : (
+          <motion.span
+            key={index}
+            className={`inline-block ${item.isGradient ? gradientClassName : ''}`}
+            variants={{
+              hidden: {
+                opacity: 0,
+                y: 20,
+              },
+              visible: {
+                opacity: 1,
+                y: 0,
+              },
+            }}
+            transition={{
+              duration: 0.3,
+              delay: delay + index * duration,
+              ease: [0.25, 0.4, 0.25, 1],
+            }}
+          >
+            {item.char === ' ' ? '\u00A0' : item.char}
+          </motion.span>
+        )
       ))}
       {/* Cursor effect */}
       <motion.span

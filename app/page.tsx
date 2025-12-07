@@ -247,7 +247,7 @@ function HomeContent() {
 
                 <motion.h1
                   variants={staggerItem}
-                  className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.1] md:leading-[0.95] tracking-tight"
+                  className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white leading-[1.1] md:leading-[0.95] tracking-tight"
                 >
                   未来を創造する
                   <br />
@@ -377,11 +377,13 @@ function HomeContent() {
             <motion.p variants={fadeInUp} className="text-amber-400 text-sm tracking-[0.3em] uppercase mb-6 font-medium">
               Mission
             </motion.p>
-            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold leading-[1.1] md:leading-[0.95] tracking-tight mb-8 md:mb-12">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.15] tracking-tight mb-8 md:mb-12">
               <TypewriterTitle
                 parts={[
                   { text: '前進する未来', isGradient: true },
-                  { text: 'の実現へ', isGradient: false },
+                  { text: 'の', isGradient: false },
+                  { text: '', isLineBreak: true },
+                  { text: '実現へ', isGradient: false },
                 ]}
                 gradientClassName="text-amber-400"
                 delay={0.3}
@@ -419,7 +421,7 @@ function HomeContent() {
               <motion.p variants={fadeInUp} className="text-amber-600 text-xs sm:text-sm tracking-[0.3em] md:tracking-[0.4em] uppercase mb-6 md:mb-10 font-medium">
                 Vision
               </motion.p>
-              <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-8 md:mb-12">
+              <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight mb-8 md:mb-12">
                 <TypewriterText
                   className="bg-clip-text text-transparent bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700"
                   delay={0.3}
@@ -447,7 +449,7 @@ function HomeContent() {
             <motion.p variants={fadeInUp} className="text-amber-600 text-sm tracking-[0.3em] uppercase mb-4 font-medium">
               Value
             </motion.p>
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
               <TypewriterText delay={0.3}>私たちの価値観</TypewriterText>
             </h2>
           </AnimatedSection>
@@ -493,7 +495,7 @@ function HomeContent() {
             <motion.p variants={fadeInUp} className="text-amber-400 text-sm tracking-[0.3em] uppercase mb-4 font-medium">
               Business
             </motion.p>
-            <h2 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
               <TypewriterText className="text-white" delay={0.3}>事業内容</TypewriterText>
             </h2>
           </AnimatedSection>
@@ -654,7 +656,7 @@ function HomeContent() {
                   Message
                 </span>
               </motion.div>
-              <h2 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-bold tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight">
                 <TypewriterText className="text-white" delay={0.3}>代表メッセージ</TypewriterText>
               </h2>
             </motion.div>
@@ -811,7 +813,7 @@ function HomeContent() {
             <motion.p variants={fadeInUp} className="text-amber-600 text-sm tracking-[0.3em] uppercase mb-4 font-medium">
               Company
             </motion.p>
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold tracking-tight">
               <TypewriterText delay={0.3}>会社概要</TypewriterText>
             </h2>
           </AnimatedSection>
@@ -860,7 +862,7 @@ function HomeContent() {
             <p className="text-amber-400 text-xs sm:text-sm tracking-[0.2em] sm:tracking-[0.3em] uppercase mb-6 md:mb-8 font-medium">
               Contact
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6 tracking-tight">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 md:mb-6 tracking-tight">
               <TypewriterText className="text-white" delay={0.3}>お問い合わせ</TypewriterText>
             </h2>
             <p className="text-neutral-400 text-base sm:text-lg md:text-xl leading-relaxed">
