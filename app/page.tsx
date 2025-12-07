@@ -227,12 +227,12 @@ function HomeContent() {
           />
         </div>
 
-        <Card className="w-full h-screen bg-black/[0.96] border-0 rounded-none relative overflow-hidden">
+        <Card className="w-full min-h-screen md:h-screen bg-black/[0.96] border-0 rounded-none relative overflow-hidden">
           <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={200} />
 
-          <motion.div style={{ y: heroY }} className="flex h-full">
+          <motion.div style={{ y: heroY }} className="flex flex-col md:flex-row h-full">
             {/* Left content */}
-            <div className="flex-1 p-8 md:p-16 lg:p-24 relative z-10 flex flex-col justify-center">
+            <div className="flex-1 p-8 md:p-16 lg:p-24 relative z-10 flex flex-col justify-center pt-24 md:pt-0">
               <motion.div
                 variants={staggerContainer}
                 initial="hidden"
@@ -281,7 +281,7 @@ function HomeContent() {
             </div>
 
             {/* Right content - 3D Spline */}
-            <div className="flex-1 relative hidden md:block min-h-[600px]">
+            <div className="flex-1 relative min-h-[400px] md:min-h-[600px] -mx-8 md:mx-0">
               <div className="absolute inset-0">
                 <SplineScene
                   scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
@@ -289,7 +289,8 @@ function HomeContent() {
                 />
               </div>
               {/* Overlay gradient for smooth blend */}
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none" />
+              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none hidden md:block" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none md:hidden" />
             </div>
           </motion.div>
 
