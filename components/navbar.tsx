@@ -55,7 +55,7 @@ export function Navbar() {
             }}
           >
             <span className="text-[var(--color-white)] text-2xl font-extralight tracking-[0.2em]">
-              SKH
+              株式会社SKH
             </span>
             <span className="absolute -bottom-2 left-0 w-0 h-px bg-[var(--color-accent)] transition-all duration-700 group-hover:w-full" />
           </Link>

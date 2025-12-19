@@ -13,6 +13,29 @@ interface WarpBackgroundProps extends HTMLAttributes<HTMLDivElement> {
   gridColor?: string;
 }
 
+// Predefined vibrant colors with adjusted saturation/lightness for visibility
+const beamColors = [
+  { hue: 0, sat: 85, light: 55 },      // red
+  { hue: 25, sat: 90, light: 55 },     // orange
+  { hue: 45, sat: 100, light: 55 },    // gold
+  { hue: 55, sat: 100, light: 60 },    // yellow
+  { hue: 60, sat: 100, light: 70 },    // lemon
+  { hue: 65, sat: 95, light: 65 },     // bright yellow
+  { hue: 80, sat: 80, light: 55 },     // lime
+  { hue: 100, sat: 75, light: 50 },    // yellow-green
+  { hue: 140, sat: 70, light: 45 },    // green
+  { hue: 170, sat: 75, light: 45 },    // teal
+  { hue: 185, sat: 80, light: 50 },    // cyan
+  { hue: 200, sat: 85, light: 55 },    // sky
+  { hue: 230, sat: 80, light: 60 },    // blue
+  { hue: 265, sat: 75, light: 60 },    // indigo
+  { hue: 285, sat: 75, light: 60 },    // purple
+  { hue: 320, sat: 80, light: 60 },    // magenta
+  { hue: 345, sat: 85, light: 60 },    // pink
+];
+
+let colorIndex = 0;
+
 const Beam = ({
   width,
   x,
@@ -24,8 +47,10 @@ const Beam = ({
   delay: number;
   duration: number;
 }) => {
-  // Random colorful hues
-  const hue = Math.floor(Math.random() * 360);
+  // Cycle through colors to ensure all colors appear
+  const color = beamColors[colorIndex % beamColors.length];
+  colorIndex++;
+  const { hue, sat, light } = color;
   const ar = Math.floor(Math.random() * 10) + 1;
 
   return (
@@ -35,7 +60,7 @@ const Beam = ({
           "--x": `${x}`,
           "--width": `${width}`,
           "--aspect-ratio": `${ar}`,
-          "--background": `linear-gradient(hsl(${hue} 80% 60%), hsl(${hue} 70% 50%) 30%, transparent)`,
+          "--background": `linear-gradient(hsl(${hue} ${sat}% ${light}%), hsl(${hue} ${sat - 10}% ${light - 10}%) 30%, transparent)`,
         } as React.CSSProperties
       }
       className={`absolute left-[var(--x)] top-0 [aspect-ratio:1/var(--aspect-ratio)] [background:var(--background)] [width:var(--width)]`}

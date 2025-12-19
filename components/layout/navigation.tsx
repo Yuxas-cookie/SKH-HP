@@ -34,7 +34,7 @@ export function Navigation({ variant = 'dark' }: NavigationProps) {
             isDark ? 'text-amber-400 hover:text-amber-300' : 'text-amber-600 hover:text-amber-500'
           }`}
         >
-          SKH
+          株式会社SKH
         </Link>
 
         <div className="hidden md:flex items-center gap-10">

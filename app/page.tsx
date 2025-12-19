@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRef, useState } from 'react'
 import { SplineScene } from '@/components/ui/spline-scene'
 import { Card } from '@/components/ui/card'
-import { Spotlight } from '@/components/ui/spotlight'
 import { CustomCursor } from '@/components/ui/custom-cursor'
 import { NoiseTexture } from '@/components/ui/noise-texture'
 import { MagneticButton } from '@/components/ui/magnetic-button'
@@ -81,14 +80,6 @@ export default function Home() {
 function HomeContent() {
   const { navigateTo } = useNavTransition()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const heroRef = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ['start start', 'end start'],
-  })
-  const heroOpacity = useTransform(scrollYProgress, [0, 1], [1, 0])
-  const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.9])
-  const heroY = useTransform(scrollYProgress, [0, 1], ['0%', '30%'])
 
   const navItems = [
     { id: 'purpose', label: 'Purpose' },
@@ -116,7 +107,7 @@ function HomeContent() {
       >
         <div className="max-w-7xl mx-auto px-8 py-5 flex items-center justify-between">
           <Link href="/" className="text-2xl font-extralight text-amber-400 hover:text-amber-300 transition-colors tracking-wider">
-            SKH
+            株式会社SKH
           </Link>
           <div className="hidden md:flex items-center gap-10">
             {navItems.map((item, i) => (
@@ -202,35 +193,10 @@ function HomeContent() {
       </motion.nav>
 
       {/* Hero Section with Spline 3D */}
-      <motion.section
-        ref={heroRef}
-        style={{ opacity: heroOpacity, scale: heroScale }}
-        className="min-h-screen w-full bg-black relative overflow-hidden"
-      >
-        {/* Animated gradient orbs */}
-        <div className="absolute inset-0 overflow-hidden">
-          <motion.div
-            className="absolute -top-40 -left-40 w-96 h-96 bg-amber-500/20 rounded-full blur-[100px]"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.5, 0.3],
-            }}
-            transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
-          />
-          <motion.div
-            className="absolute -bottom-40 -right-40 w-[500px] h-[500px] bg-amber-600/10 rounded-full blur-[120px]"
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
-          />
-        </div>
-
+      <section className="min-h-screen w-full bg-black relative overflow-hidden">
         <Card className="w-full min-h-screen md:h-screen bg-black/[0.96] border-0 rounded-none relative overflow-hidden">
-          <Spotlight className="-top-40 left-0 md:left-60 md:-top-20" size={200} />
 
-          <motion.div style={{ y: heroY }} className="flex flex-col md:flex-row h-full">
+          <div className="flex flex-col md:flex-row h-full">
             {/* Left content */}
             <div className="flex-1 p-8 md:p-16 lg:p-24 relative z-10 flex flex-col justify-center pt-24 md:pt-0">
               <motion.div
@@ -291,7 +257,7 @@ function HomeContent() {
               <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent pointer-events-none hidden md:block" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 pointer-events-none md:hidden" />
             </div>
-          </motion.div>
+          </div>
 
           {/* Scroll indicator */}
           <motion.div
@@ -310,7 +276,8 @@ function HomeContent() {
             </motion.div>
           </motion.div>
         </Card>
-      </motion.section>
+
+      </section>
 
       {/* Purpose Section */}
       <ParallaxSection id="purpose" className="py-40 md:py-56 px-8 bg-gradient-to-br from-amber-50 via-white to-stone-100 relative overflow-hidden">
@@ -407,7 +374,7 @@ function HomeContent() {
       {/* Vision Section */}
       <WarpBackground
         className="py-32 md:py-40 bg-white border-0 rounded-none p-8"
-        beamsPerSide={4}
+        beamsPerSide={8}
         beamSize={5}
         beamDelayMax={3}
         beamDelayMin={0}
@@ -568,91 +535,17 @@ function HomeContent() {
       </ParallaxSection>
 
       {/* Message Section */}
-      <ParallaxSection className="py-32 md:py-48 px-8 bg-black text-white relative overflow-hidden">
-        {/* Subtle mesh gradient background */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(245,158,11,0.04)_0%,transparent_40%),radial-gradient(ellipse_at_bottom_right,rgba(168,85,247,0.03)_0%,transparent_40%)]" />
-
-        {/* Subtle grid lines */}
-        <div className="absolute inset-0 opacity-[0.015]" style={{
-          backgroundImage: `linear-gradient(rgba(245,158,11,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(245,158,11,0.3) 1px, transparent 1px)`,
-          backgroundSize: '80px 80px'
-        }} />
-
-        {/* Subtle animated glow orbs */}
-        <motion.div
-          className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-amber-500/10 rounded-full blur-[180px]"
-          animate={{
-            scale: [1, 1.3, 1],
-            opacity: [0.08, 0.15, 0.08],
-            x: [0, 80, 0],
-          }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/8 rounded-full blur-[150px]"
-          animate={{
-            scale: [1.2, 1, 1.2],
-            opacity: [0.05, 0.12, 0.05],
-            x: [0, -60, 0],
-          }}
-          transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
-        />
-
-        {/* Floating particles */}
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-0.5 h-0.5 bg-amber-400/30 rounded-full"
-            style={{
-              left: `${10 + (i * 7)}%`,
-              top: `${15 + (i * 6)}%`,
-            }}
-            animate={{
-              y: [0, -20, 0],
-              opacity: [0.1, 0.4, 0.1],
-            }}
-            transition={{
-              duration: 4 + i * 0.5,
-              repeat: Infinity,
-              delay: i * 0.3,
-              ease: 'easeInOut',
-            }}
-          />
-        ))}
-
-        {/* Subtle decorative lines */}
-        <motion.div
-          className="absolute top-32 left-10 w-px h-24 bg-gradient-to-b from-transparent via-amber-500/20 to-transparent"
-          animate={{ opacity: [0.2, 0.4, 0.2] }}
-          transition={{ duration: 5, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute top-48 right-16 w-px h-20 bg-gradient-to-b from-transparent via-amber-500/15 to-transparent"
-          animate={{ opacity: [0.15, 0.35, 0.15] }}
-          transition={{ duration: 6, repeat: Infinity, delay: 1 }}
-        />
-
-        {/* Large quote mark */}
-        <motion.div
-          className="absolute top-24 md:top-36 left-8 md:left-20 text-[150px] md:text-[220px] font-serif leading-none select-none"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1.5 }}
-        >
-          <span className="text-amber-500/[0.07]">"</span>
-        </motion.div>
-
+      <ParallaxSection className="py-32 md:py-48 px-4 sm:px-8 bg-black relative overflow-hidden">
         <div className="max-w-4xl mx-auto relative z-10">
           <AnimatedSection>
             {/* Section header */}
-            <motion.div variants={fadeInUp} className="text-center mb-16">
+            <motion.div variants={fadeInUp} className="text-center mb-8 md:mb-12">
               <motion.div
                 className="inline-block mb-6"
                 whileHover={{ scale: 1.05 }}
                 transition={{ type: 'spring', stiffness: 300 }}
               >
-                <span className="px-6 py-2 rounded-full border border-amber-500/30 bg-amber-500/5 backdrop-blur-sm text-amber-400 text-xs tracking-[0.4em] uppercase font-medium">
+                <span className="px-6 py-2 rounded-full border border-amber-500/30 bg-amber-500/5 text-amber-400 text-xs tracking-[0.4em] uppercase font-medium">
                   Message
                 </span>
               </motion.div>
@@ -661,146 +554,150 @@ function HomeContent() {
               </h2>
             </motion.div>
 
+            {/* Letter style container */}
+            <motion.div
+              className="relative bg-[#faf8f5] rounded-sm shadow-2xl shadow-black/50 p-8 sm:p-12 md:p-16 lg:p-20 border border-amber-200/30"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+              style={{
+                backgroundImage: `
+                  repeating-linear-gradient(
+                    transparent,
+                    transparent 35px,
+                    rgba(180, 160, 140, 0.15) 35px,
+                    rgba(180, 160, 140, 0.15) 36px
+                  )
+                `,
+                backgroundPosition: '0 24px',
+              }}
+            >
+              {/* Letter decorative top border */}
+              <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-700 via-amber-500 to-amber-700" />
+
+              {/* Subtle paper texture overlay */}
+              <div className="absolute inset-0 opacity-[0.02] pointer-events-none rounded-sm" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+              }} />
+
             {/* First text block */}
-            <div className="text-neutral-300 leading-loose space-y-6 md:space-y-10 text-base sm:text-lg md:text-xl mb-12 md:mb-20 text-center">
+            <div className="leading-[2.2] space-y-6 md:space-y-8 text-base sm:text-lg md:text-xl mb-10 md:mb-14 relative z-10" style={{ fontFamily: "'Noto Serif JP', 'Yu Mincho', serif" }}>
               <motion.p
-                className="text-lg sm:text-xl md:text-3xl font-light text-white/90"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-lg sm:text-xl md:text-2xl text-stone-700"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                私は昔から、人に喜んでもらうことや、<br className="hidden sm:block" />驚きと感動が生まれる瞬間をつくることが<br className="hidden sm:block" /><span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 to-amber-300">心から好きでした。</span>
+                私は昔から、人に喜んでもらうことや、驚きと感動が生まれる瞬間をつくることが<span className="text-amber-800 font-medium">心から好きでした。</span>
               </motion.p>
               <motion.p
-                className="text-neutral-500 text-sm sm:text-base md:text-lg italic"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-stone-500 text-sm sm:text-base md:text-lg italic"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
                 体育祭では応援団長、文化祭では舞台主演をするタイプです。
               </motion.p>
               <motion.p
-                className="text-neutral-400 text-sm sm:text-base md:text-lg"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-stone-600 text-sm sm:text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                誰かの世界が広がる瞬間、<br className="hidden sm:block" />未来の可能性に光が差す瞬間、<br className="hidden sm:block" />一歩踏み出した表情が変わる瞬間。<br className="hidden sm:block" />その場に立ち会えることに、深い喜びを感じてきました。
+                誰かの世界が広がる瞬間、未来の可能性に光が差す瞬間、一歩踏み出した表情が変わる瞬間。その場に立ち会えることに、深い喜びを感じてきました。
               </motion.p>
               <motion.p
-                className="text-lg sm:text-xl md:text-3xl font-medium pt-2 md:pt-4"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-lg sm:text-xl md:text-2xl text-stone-700 font-medium pt-2"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-white via-amber-100 to-white">
-                  だから私は、その感動と喜びを、<br className="hidden sm:block" />仲間へ、顧客へ、社会へと広げていきたい。
-                </span>
+                だから私は、その感動と喜びを、仲間へ、顧客へ、社会へと広げていきたい。
               </motion.p>
               <motion.p
-                className="text-neutral-400 text-sm sm:text-base md:text-lg"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-stone-600 text-sm sm:text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                誰かの人生や事業が前へ動き出す瞬間に寄り添い、<br className="hidden sm:block" />その喜びを共に分かち合いたいのです。
+                誰かの人生や事業が前へ動き出す瞬間に寄り添い、その喜びを共に分かち合いたいのです。
               </motion.p>
             </div>
 
-            {/* Animated divider */}
-            <motion.div
-              className="flex items-center justify-center gap-4 my-16"
-              initial={{ opacity: 0, scaleX: 0 }}
-              whileInView={{ opacity: 1, scaleX: 1 }}
-              viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 1.5, ease: [0.25, 0.4, 0.25, 1] }}
-            >
-              <motion.div
-                className="w-16 md:w-24 h-px bg-gradient-to-r from-transparent to-amber-500/50"
-                animate={{ scaleX: [0.8, 1, 0.8], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-              <motion.div
-                className="w-2 h-2 rounded-full bg-amber-500"
-                animate={{ scale: [1, 1.3, 1], boxShadow: ['0 0 10px rgba(245,158,11,0.5)', '0 0 25px rgba(245,158,11,0.8)', '0 0 10px rgba(245,158,11,0.5)'] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              />
-              <motion.div
-                className="w-16 md:w-24 h-px bg-gradient-to-l from-transparent to-amber-500/50"
-                animate={{ scaleX: [0.8, 1, 0.8], opacity: [0.5, 1, 0.5] }}
-                transition={{ duration: 3, repeat: Infinity }}
-              />
-            </motion.div>
+            {/* Divider */}
+            <div className="flex items-center justify-center gap-4 my-10 md:my-14 relative z-10">
+              <div className="w-16 md:w-24 h-px bg-gradient-to-r from-transparent to-amber-600/40" />
+              <div className="w-1.5 h-1.5 rounded-full bg-amber-600" />
+              <div className="w-16 md:w-24 h-px bg-gradient-to-l from-transparent to-amber-600/40" />
+            </div>
 
             {/* Second text block */}
-            <div className="text-neutral-300 leading-loose space-y-6 md:space-y-10 text-base sm:text-lg md:text-xl mb-12 md:mb-20 text-center">
+            <div className="leading-[2.2] space-y-6 md:space-y-8 text-base sm:text-lg md:text-xl mb-10 md:mb-14 relative z-10" style={{ fontFamily: "'Noto Serif JP', 'Yu Mincho', serif" }}>
               <motion.p
-                className="text-white font-medium text-base sm:text-lg md:text-2xl"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-stone-700 font-medium text-base sm:text-lg md:text-xl"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                アイデアだけで終わらせない。<br className="hidden sm:block" />流行の言葉を並べるだけでも終わらせない。
+                アイデアだけで終わらせない。流行の言葉を並べるだけでも終わらせない。
               </motion.p>
               <motion.p
-                className="text-neutral-400 text-sm sm:text-base md:text-lg"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-stone-600 text-sm sm:text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                現場で共に考え、共に悩み、共に動き、<br className="hidden sm:block" />成果が出るまで伴走する。<br className="hidden sm:block" />そして、確かな一歩の前進を必ず生み出す。
+                現場で共に考え、共に悩み、共に動き、成果が出るまで伴走する。そして、確かな一歩の前進を必ず生み出す。
               </motion.p>
               <motion.p
-                className="text-neutral-300 text-sm sm:text-base md:text-lg"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-stone-600 text-sm sm:text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                私たちが目指しているのは、<br className="hidden sm:block" /><span className="text-lg sm:text-xl md:text-3xl font-semibold bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400">共に成長し、共に勝つ世界。</span><br className="hidden sm:block" />変化と挑戦を、当たり前に楽しむ文化。
+                私たちが目指しているのは、<span className="text-lg sm:text-xl md:text-2xl font-semibold text-amber-800">共に成長し、共に勝つ世界。</span>変化と挑戦を、当たり前に楽しむ文化。
               </motion.p>
               <motion.p
-                className="text-neutral-400 text-sm sm:text-base md:text-lg"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-stone-600 text-sm sm:text-base md:text-lg"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                その中心に立ち、<br className="hidden sm:block" />人生と事業のターニングポイントを創り続けること。<br className="hidden sm:block" />それがSKHの存在意義です。
+                その中心に立ち、人生と事業のターニングポイントを創り続けること。それがSKHの存在意義です。
               </motion.p>
               <motion.p
-                className="text-lg sm:text-xl md:text-3xl font-medium pt-4 md:pt-6 text-white"
-                initial={{ opacity: 0, y: 40 }}
+                className="text-lg sm:text-xl md:text-2xl font-medium pt-2 text-stone-700"
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-100px' }}
-                transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+                transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
               >
-                これからも、<br className="hidden sm:block" /><span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-300 via-white to-amber-300">感動と喜びが連鎖する未来、</span><br className="hidden sm:block" />理想を実現していける文化を、創っていきます。
+                これからも、<span className="text-amber-800">感動と喜びが連鎖する未来、</span>理想を実現していける文化を、創っていきます。
               </motion.p>
             </div>
 
             {/* Signature */}
             <motion.div
-              className="text-center mt-12 md:mt-20"
-              initial={{ opacity: 0, y: 40 }}
+              className="text-right mt-12 md:mt-16 relative z-10"
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-100px' }}
-              transition={{ duration: 1.8, ease: [0.25, 0.4, 0.25, 1] }}
+              transition={{ duration: 1, ease: [0.25, 0.4, 0.25, 1] }}
+              style={{ fontFamily: "'Noto Serif JP', 'Yu Mincho', serif" }}
             >
-              <p className="text-neutral-600 text-xs sm:text-sm mb-1 tracking-[0.15em] sm:tracking-[0.2em]">株式会社SKH</p>
-              <p className="text-neutral-600 text-xs sm:text-sm mb-4 md:mb-6 tracking-[0.15em] sm:tracking-[0.2em]">代表取締役</p>
-              <p className="text-3xl sm:text-4xl md:text-5xl tracking-[0.1em] sm:tracking-[0.15em] font-light">
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-300 to-amber-400">
-                  片山 弘
-                </span>
-              </p>
+              <p className="text-stone-500 text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em]">株式会社SKH　代表取締役　片山 弘</p>
+            </motion.div>
+
             </motion.div>
           </AnimatedSection>
         </div>
