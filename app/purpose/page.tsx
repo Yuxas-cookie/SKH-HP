@@ -5,7 +5,6 @@ import { useRef } from 'react'
 import Link from 'next/link'
 import { Navigation } from '@/components/layout/navigation'
 import { Footer } from '@/components/layout/footer'
-import { CustomCursor } from '@/components/ui/custom-cursor'
 import { NoiseTexture } from '@/components/ui/noise-texture'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 
@@ -37,7 +36,6 @@ export default function PurposePage() {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900">
-      <CustomCursor />
       <NoiseTexture opacity={0.02} />
       <Navigation variant="light" />
 

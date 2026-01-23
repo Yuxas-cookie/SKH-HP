@@ -4,7 +4,6 @@ import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { Navigation } from '@/components/layout/navigation'
 import { Footer } from '@/components/layout/footer'
-import { CustomCursor } from '@/components/ui/custom-cursor'
 import { NoiseTexture } from '@/components/ui/noise-texture'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 
@@ -48,7 +47,6 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <CustomCursor />
       <NoiseTexture opacity={0.03} />
       <Navigation variant="dark" />
 

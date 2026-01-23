@@ -5,7 +5,6 @@ import Link from 'next/link'
 import { useRef, useState } from 'react'
 import { SplineScene } from '@/components/ui/spline-scene'
 import { Card } from '@/components/ui/card'
-import { CustomCursor } from '@/components/ui/custom-cursor'
 import { NoiseTexture } from '@/components/ui/noise-texture'
 import { MagneticButton } from '@/components/ui/magnetic-button'
 import { EvervaultCard } from '@/components/ui/evervault-card'
@@ -95,7 +94,6 @@ function HomeContent() {
 
   return (
     <div className="min-h-screen bg-stone-50 text-stone-900 noise-overlay">
-      <CustomCursor />
       <NoiseTexture opacity={0.02} />
 
       {/* Navigation */}

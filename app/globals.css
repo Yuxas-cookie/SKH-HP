@@ -384,12 +384,8 @@ html {
   z-index: 9999;
 }
 
-/* ===== Hide Default Cursor on Desktop ===== */
-@media (pointer: fine) {
-  * {
-    cursor: none !important;
-  }
-}
+/* ===== Default Cursor ===== */
+/* Custom cursor disabled */
 
 /* ===== Smooth Scroll Snap ===== */
 .scroll-snap-container {
